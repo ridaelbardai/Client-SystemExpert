@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -39,20 +41,21 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.toedter.calendar.JDateChooser;
+
 import fstm.ilisi.controller.Controller;
-import fstm.ilisi.model.Diagnostique;
-import fstm.ilisi.model.MaladieCronique;
-import fstm.ilisi.model.Patient;
-import fstm.ilisi.model.Region;
-import fstm.ilisi.model.Symptome;
-import fstm.ilisi.model.Ville;
+import ma.fstm.ilisi.projet.model.bo.Diagnostic;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class Home extends JFrame {
 	/**
 	 * 
 	 */
+	private Controller ctr;
 	private static final long serialVersionUID = 1L;
-	private Diagnostique maDiagnostique;
+	private Diagnostic maDiagnostique;
 	private JPanel contentPane;
 	private JTextField textFieldNom;
 	private JTextField textFieldPrenom;
@@ -92,20 +95,20 @@ public class Home extends JFrame {
 	}
 
 	// pour remplire la liste des symptomes dans un diagnostique
-	void remplireSymptomes(fstm.ilisi.model.Diagnostique dgstq, JList<String> list) {
-		for (int i = 0; i < list.getModel().getSize(); i++) 
-			dgstq.AjouterSymptome(new Symptome(0, "title", null, list.getModel().getElementAt(i).toString()));
-	}
+//	void remplireSymptomes(Diagnostic dgstq, JList<String> list) {
+//		for (int i = 0; i < list.getModel().getSize(); i++) 
+//			dgstq.addSymptom();
+//	}
 
 	// pour remplire les maladies chroniques dans un diagnostique
-	public void remplirMaladiesChroniques(JCheckBox cbd, JCheckBox cbc, JCheckBox cbh) {
-		if (cbd.isSelected())
-			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbd).getText(), 0));
-		if (cbc.isSelected())
-			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbc).getText(), 0));
-		if (cbh.isSelected())
-			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbh).getText(), 0));
-	}
+//	public void remplirMaladiesChroniques(JCheckBox cbd, JCheckBox cbc, JCheckBox cbh) {
+//		if (cbd.isSelected())
+//			maDiagnostique.addCronic(new CronicDisease());
+//		if (cbc.isSelected())
+//			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbc).getText(), 0));
+//		if (cbh.isSelected())
+//			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbh).getText(), 0));
+//	}
 
 	/**
 	 * Launch the application.
@@ -127,9 +130,11 @@ public class Home extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
-	public Home() {
+	public Home() throws IOException {
+		ctr= new Controller();
 		setTitle("System Expert Covid19");
 		setForeground(Color.DARK_GRAY);
 		setBackground(new Color(192, 192, 192));
@@ -263,7 +268,7 @@ public class Home extends JFrame {
 		panel.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Entrez vos informations : ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.setBounds(32, 100, 335, 272);
+		panel.setBounds(32, 11, 335, 409);
 		IUP_Center.add(panel);
 		panel.setLayout(null);
 
@@ -273,12 +278,17 @@ public class Home extends JFrame {
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 15));
 
 		JLabel lblPrenom = new JLabel("Prenom :");
-		lblPrenom.setBounds(24, 109, 93, 39);
+		lblPrenom.setBounds(24, 66, 93, 39);
 		panel.add(lblPrenom);
 		lblPrenom.setFont(new Font("Dialog", Font.BOLD, 15));
+		
+		UtilDateModel model = new UtilDateModel();
+		JDatePanelImpl datePanel = new JDatePanelImpl(model);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+		panel.add(datePicker);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Age :");
-		lblNewLabel_1_1.setBounds(24, 195, 93, 39);
+		lblNewLabel_1_1.setBounds(24, 102, 93, 39);
 		panel.add(lblNewLabel_1_1);
 		lblNewLabel_1_1.setFont(new Font("Dialog", Font.BOLD, 15));
 
@@ -289,15 +299,40 @@ public class Home extends JFrame {
 		textFieldNom.setColumns(10);
 
 		textFieldPrenom = new JTextField();
-		textFieldPrenom.setBounds(158, 113, 114, 30);
+		textFieldPrenom.setBounds(158, 70, 114, 30);
 		panel.add(textFieldPrenom);
 		textFieldPrenom.setFont(new Font("Dialog", Font.PLAIN, 15));
 		textFieldPrenom.setColumns(10);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(159, 116, 113, 20);
+		panel.add(dateChooser);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(153, 159, 119, 22);
+		comboBox.setModel(new DefaultComboBoxModel<String>(ctr.retreiveRegions()));
+		panel.add(comboBox);
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(153, 209, 119, 22);
+		panel.add(comboBox_1);
 
-		JSpinner spinnerAge = new JSpinner();
-		spinnerAge.setBounds(158, 197, 47, 20);
-		panel.add(spinnerAge);
-		spinnerAge.setModel(new SpinnerNumberModel(20, 1, 100, 1));
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String reg = comboBox.getSelectedItem().toString();
+				comboBox_1.setModel(new DefaultComboBoxModel<String>(ctr.VilleParreg(reg)));
+			}
+		});
+		
+		JLabel lblNewLabel_1_1_1 = new JLabel("Region :");
+		lblNewLabel_1_1_1.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblNewLabel_1_1_1.setBounds(24, 152, 93, 39);
+		panel.add(lblNewLabel_1_1_1);
+		
+		JLabel lblNewLabel_1_1_2 = new JLabel("ville :");
+		lblNewLabel_1_1_2.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblNewLabel_1_1_2.setBounds(24, 209, 93, 39);
+		panel.add(lblNewLabel_1_1_2);
 
 		JPanel panelImg = new JPanel();
 		panelImg.setBounds(401, 36, 375, 384);
@@ -366,10 +401,8 @@ public class Home extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(28, 85, 305, 149);
 		panel_symptomes.add(scrollPane);
-		String[] values = new String[] { "fievre", "fatigue", "toux seche", "diarrhe", "essouflement", "chute",
-				"frisson", "congestion nasal", "gorge seche", "ecoulement nasal", "dyspnee", "douleurs musculaires",
-				"maux de tete", "perte de gout", "perte de l'odorat", "confusion", "nause", "vomissement",
-				"conjonctivite" };
+		//remplire liste des symptomes
+		String[] values = ctr.retreiveSymptoms();
 		DefaultListModel<String> listModelsrc = new DefaultListModel<String>();
 		for (int i = 0; i < values.length; i++) {
 			listModelsrc.addElement(values[i]);
@@ -407,6 +440,10 @@ public class Home extends JFrame {
 		});
 		btnNewButton_3.setBounds(343, 154, 98, 26);
 		panel_symptomes.add(btnNewButton_3);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Vous etiez en contact avec quelequ'un");
+		chckbxNewCheckBox.setBounds(290, 290, 218, 23);
+		panel_symptomes.add(chckbxNewCheckBox);
 
 		JPanel panel_maladiesChroniques = new JPanel();
 		PDS_Center.add(panel_maladiesChroniques, BorderLayout.SOUTH);
@@ -439,14 +476,14 @@ public class Home extends JFrame {
 		Terminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//creation d'un patient
-				Patient p = new Patient(0, textFieldNom.getText(), textFieldPrenom.getText(), "khadija21", "1234", null,
-						"hay mohammadi", new Ville(0, "title", new Region(0, getName())));
-				p.setAge((int) spinnerAge.getValue());
-				p.setTemperature((int) spinnerTemperature.getValue());
-				//creation du diagnostique
-				maDiagnostique = new Diagnostique(p, null, 0);
-				remplirMaladiesChroniques(cbDiabete, cbCardiaque, cbHypertendu);
-				remplireSymptomes(maDiagnostique, list_dst);
+//				Patient p = new Patient(0, textFieldNom.getText(), textFieldPrenom.getText(), "khadija21", "1234", null,
+//						"hay mohammadi", new Ville(0, "title", new Region(0, getName())));
+//				p.setAge((int) spinnerAge.getValue());
+//				p.setTemperature((int) spinnerTemperature.getValue());
+//				//creation du diagnostique
+//				maDiagnostique = new Diagnostique(p, null, 0);
+//				remplirMaladiesChroniques(cbDiabete, cbCardiaque, cbHypertendu);
+//				remplireSymptomes(maDiagnostique, list_dst);
 				try {
 					// appel du controlleur pour executer l'action envoyerDiagnostique()
 					new Controller().envoyerDiagnostique(maDiagnostique);
