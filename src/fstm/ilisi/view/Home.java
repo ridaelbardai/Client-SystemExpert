@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -25,8 +26,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -34,18 +37,21 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
-
-import fstm.ilisi.controller.HomeController;
-import fstm.ilisi.model.*;
-
-import javax.swing.BoxLayout;
-import javax.swing.JTable;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.ListSelectionModel;
-import java.awt.Toolkit;
+
+import fstm.ilisi.controller.Controller;
+import fstm.ilisi.model.Diagnostique;
+import fstm.ilisi.model.MaladieCronique;
+import fstm.ilisi.model.Patient;
+import fstm.ilisi.model.Region;
+import fstm.ilisi.model.Symptome;
+import fstm.ilisi.model.Ville;
 
 public class Home extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Diagnostique maDiagnostique;
 	private JPanel contentPane;
 	private JTextField textFieldNom;
@@ -53,14 +59,18 @@ public class Home extends JFrame {
 	private JTextField IdentifianttextField;
 	private JTable table;
 
-	public <E> void moveSelectedTo(JList from, JList to) {
-
+	/**
+	 * cette fonction sert a transferer 
+	 * les elements entre les deux listes
+	 * vers les deux sens 
+	 */
+	public <E> void moveSelectedTo(JList<E> from, JList<E> to) {
 		try {
 			List<E> entitiesToTransition = from.getSelectedValuesList();
 			if (entitiesToTransition == null || entitiesToTransition.isEmpty())
 				return;
 
-			DefaultListModel fromModel = (DefaultListModel) from.getModel();
+			DefaultListModel<E> fromModel = (DefaultListModel<E>) from.getModel();
 			for (E entity : entitiesToTransition)
 				fromModel.removeElement(entity);
 
@@ -69,28 +79,25 @@ public class Home extends JFrame {
 			for (int i = 0; i < model.getSize(); i++)
 				previouslyLoadedEntities.add(model.getElementAt(i));
 			DefaultListModel<E> dlm = new DefaultListModel<>() {
+				private static final long serialVersionUID = 1L;
 				{
 					addAll(previouslyLoadedEntities);
 					addAll(entitiesToTransition);
 				}
-
 			};
 			to.setModel(dlm);
-
 		} catch (Exception e) {
 			throw new RuntimeException("Erreur lors du transfer vers une liste ", e);
 		}
 	}
 
-	// pour prendre les symptomes
-	void remplireSymptomes(fstm.ilisi.model.Diagnostique dgstq, JList list) {
-		for (int i = 0; i < list.getModel().getSize(); i++) {
-//	            String item = list.getModel().getElementAt(i).toString();
+	// pour remplire la liste des symptomes dans un diagnostique
+	void remplireSymptomes(fstm.ilisi.model.Diagnostique dgstq, JList<String> list) {
+		for (int i = 0; i < list.getModel().getSize(); i++) 
 			dgstq.AjouterSymptome(new Symptome(0, "title", null, list.getModel().getElementAt(i).toString()));
-		}
 	}
 
-	// pour prendre les valeurs des maladies chroniques
+	// pour remplire les maladies chroniques dans un diagnostique
 	public void remplirMaladiesChroniques(JCheckBox cbd, JCheckBox cbc, JCheckBox cbh) {
 		if (cbd.isSelected())
 			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbd).getText(), 0));
@@ -126,7 +133,7 @@ public class Home extends JFrame {
 		setTitle("System Expert Covid19");
 		setForeground(Color.DARK_GRAY);
 		setBackground(new Color(192, 192, 192));
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\rb99\\Desktop\\doctor.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
 		setResizable(false);
 		setAlwaysOnTop(true);
 		CardLayout CL = new CardLayout(0, 0);
@@ -159,7 +166,7 @@ public class Home extends JFrame {
 			}
 		});
 		voirHistorique.setBorder(new EmptyBorder(0, 0, 0, 0));
-		voirHistorique.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\history (1).png"));
+		voirHistorique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\history (1).png"));
 		voirHistorique.setBounds(92, 134, 233, 186);
 		histo_consult.add(voirHistorique);
 
@@ -169,7 +176,7 @@ public class Home extends JFrame {
 				CL.show(contentPane, "InfoUserPanel");
 			}
 		});
-		nouveauDiagnostique.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\add-file.png"));
+		nouveauDiagnostique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\add-file.png"));
 		nouveauDiagnostique.setBounds(469, 134, 233, 186);
 		histo_consult.add(nouveauDiagnostique);
 
@@ -192,7 +199,7 @@ public class Home extends JFrame {
 				CL.show(contentPane, "Identification");
 			}
 		});
-		btnRevenirVersIdentification.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\icons8-back-50.png"));
+		btnRevenirVersIdentification.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification.setBounds(10, 11, 30, 30);
 		histo_consult.add(btnRevenirVersIdentification);
 
@@ -204,13 +211,13 @@ public class Home extends JFrame {
 					CL.show(contentPane, "histo_consult");
 				} else {
 					String message = "Vous n'avez pas encore un dossier ?";
-				    int answer = JOptionPane.showConfirmDialog(contentPane, message);
-				    if (answer == JOptionPane.YES_OPTION) {
-				      // User clicked YES.
-				    	CL.show(contentPane, "InfoUserPanel");
-				    } else if (answer == JOptionPane.NO_OPTION) {
-				     
-				    }
+					int answer = JOptionPane.showConfirmDialog(contentPane, message);
+					if (answer == JOptionPane.YES_OPTION) {
+						// User clicked YES.
+						CL.show(contentPane, "InfoUserPanel");
+					} else if (answer == JOptionPane.NO_OPTION) {
+
+					}
 				}
 
 			}
@@ -218,15 +225,15 @@ public class Home extends JFrame {
 		Commencer_btn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		Commencer_btn.setBounds(288, 384, 196, 41);
 		Identification.add(Commencer_btn);
-		
+
 		JPanel image = new JPanel();
 		image.setBounds(172, 11, 423, 325);
 		Identification.add(image);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\medical-record.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\medical-record.png"));
 		image.add(lblNewLabel_1);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Entrez le numero de votre dossier medical");
 		lblNewLabel_3.setBounds(288, 458, 200, 22);
 		Identification.add(lblNewLabel_3);
@@ -294,24 +301,24 @@ public class Home extends JFrame {
 
 		JPanel panelImg = new JPanel();
 		panelImg.setBounds(401, 36, 375, 384);
-		JLabel imgLabel = new JLabel(new ImageIcon("C:\\Users\\rb99\\Desktop\\doctor.png"));
+		JLabel imgLabel = new JLabel(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
 		panelImg.add(imgLabel);
 
 		IUP_Center.add(panelImg);
-		
+
 		JPanel IUP_North = new JPanel();
 		InfoUserPanel.add(IUP_North, BorderLayout.NORTH);
 		IUP_North.setLayout(new GridLayout(0, 1, 0, 0));
-		
+
 		JButton btnRevenirVersIdentification_1 = new JButton("");
 		btnRevenirVersIdentification_1.setHorizontalAlignment(SwingConstants.LEFT);
 		IUP_North.add(btnRevenirVersIdentification_1);
 		btnRevenirVersIdentification_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			CL.previous(contentPane);
+				CL.previous(contentPane);
 			}
 		});
-		btnRevenirVersIdentification_1.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\icons8-back-50.png"));
+		btnRevenirVersIdentification_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification_1.setForeground(Color.WHITE);
 		btnRevenirVersIdentification_1.setContentAreaFilled(false);
 		btnRevenirVersIdentification_1.setBorder(BorderFactory.createEmptyBorder());
@@ -363,11 +370,11 @@ public class Home extends JFrame {
 				"frisson", "congestion nasal", "gorge seche", "ecoulement nasal", "dyspnee", "douleurs musculaires",
 				"maux de tete", "perte de gout", "perte de l'odorat", "confusion", "nause", "vomissement",
 				"conjonctivite" };
-		DefaultListModel listModelsrc = new DefaultListModel();
+		DefaultListModel<String> listModelsrc = new DefaultListModel<String>();
 		for (int i = 0; i < values.length; i++) {
 			listModelsrc.addElement(values[i]);
 		}
-		JList list_src = new JList(listModelsrc);
+		JList<String> list_src = new JList<String>(listModelsrc);
 		list_src.setVisibleRowCount(10);
 		scrollPane.setViewportView(list_src);
 		list_src.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -377,7 +384,7 @@ public class Home extends JFrame {
 		list_src.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 
 		DefaultListModel listModeldst = new DefaultListModel();
-		JList list_dst = new JList();
+		JList<String> list_dst = new JList<String>();
 		list_dst.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list_dst.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		list_dst.setBounds(451, 85, 305, 149);
@@ -385,7 +392,6 @@ public class Home extends JFrame {
 
 		JButton btnNewButton_2 = new JButton(">>");
 		btnNewButton_2.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				moveSelectedTo(list_src, list_dst);
 			}
@@ -428,64 +434,58 @@ public class Home extends JFrame {
 		cbHypertendu.setFont(new Font("Dialog", Font.BOLD, 15));
 		panel_CheckBoxs.add(cbHypertendu);
 
-		/////////////////////////////////////////////////////////////////////// FIRE
+		//Button d'envoi du diagnostique 
 		JButton Terminer = new JButton("Terminer");
 		Terminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//creation d'un patient
 				Patient p = new Patient(0, textFieldNom.getText(), textFieldPrenom.getText(), "khadija21", "1234", null,
-						"hay mohammadi",
-						new Ville(0, "title", new Region(0, getName())));
+						"hay mohammadi", new Ville(0, "title", new Region(0, getName())));
 				p.setAge((int) spinnerAge.getValue());
 				p.setTemperature((int) spinnerTemperature.getValue());
+				//creation du diagnostique
 				maDiagnostique = new Diagnostique(p, null, 0);
 				remplirMaladiesChroniques(cbDiabete, cbCardiaque, cbHypertendu);
 				remplireSymptomes(maDiagnostique, list_dst);
-//				System.out.println(maDiagnostique);
 				try {
-					new HomeController().envoyer(maDiagnostique);
+					// appel du controlleur pour executer l'action envoyerDiagnostique()
+					new Controller().envoyerDiagnostique(maDiagnostique);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
 			}
 		});
 		PDS_South.add(Terminer);
-		
+
 		JPanel historique = new JPanel();
 		contentPane.add(historique, "historique");
 		historique.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel histoPanelCenter = new JPanel();
 		historique.add(histoPanelCenter);
 		histoPanelCenter.setLayout(null);
-		
+
 		JButton btnNewButton_1 = new JButton("");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CL.show(contentPane, "histo_consult");
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\icons8-back-50.png"));
+		btnNewButton_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\test\\recourses\\icons8-back-50.png"));
 		btnNewButton_1.setBounds(10, 11, 34, 35);
 		histoPanelCenter.add(btnNewButton_1);
-		
+
 		table = new JTable();
 		table.setRowSelectionAllowed(false);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		table.setEnabled(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"id", "Date", "Symptomes", "Resultat", "Commentaire"
-			}
-		));
+		table.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "id", "Date", "Symptomes", "Resultat", "Commentaire" }));
 		table.setBorder(UIManager.getBorder("PasswordField.border"));
 		table.setBounds(10, 121, 766, 231);
 		histoPanelCenter.add(table);
 
-		//////////////////////////////////////////////////////////////////////////
 	}
 }
