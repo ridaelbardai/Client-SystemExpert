@@ -53,7 +53,7 @@ public class Controller {
 		// envoi vers serveur
 		try {
 			System.out.println(diagno);
-			envoyerDiagnostique(diagno);
+			this.Envo_diag(diagno);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -267,26 +267,28 @@ public class Controller {
 
 	}
 
-	public void Envo_diag(Diagnostic d) {
+	public void Envo_diag(Diagnostic d)
+	{ 
+		Diagnostic p = new Diagnostic() ;
 		System.out.println("envoi diagnostique ...");
-		try (Socket socket = new Socket(server, 234)) {
+		try (Socket socket = new Socket("localhost", 234)) {
+			// pour la recuperation
+			
 
 			// pour l'envoie
 			OutputStream outputStream = socket.getOutputStream();
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-			InputStream is = socket.getInputStream();
-			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			Request req = new Request(d, 9);
 
-			Request req = new Request(d, 8);
-
-			System.out.println(req);
 			objectOutputStream.writeObject(req);
-
-			d = (Diagnostic) objectInputStream.readObject();
-			System.out.println("Connexion reussite !8");
-
-			System.out.println("\n\n apres \n\n" + d);
+			System.out.println(req);
+			System.out.println("Connexion reussite 1!");
+			InputStream is = socket.getInputStream();
+			System.out.println(is);
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			System.out.println("Connexion reussite !");
+			p = (Diagnostic)objectInputStream.readObject();
 			try {
 				is.close();
 				objectOutputStream.close();
@@ -295,15 +297,15 @@ public class Controller {
 				System.out.println(i);
 			}
 		} catch (IOException e) {
-
+			// TODO Auto-generated catch block
 			System.out.println(e);
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		System.out.println(p);
-
+		} 
+		
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -344,10 +346,10 @@ public class Controller {
 
 	public Diagnostic AffichageDiagnostique(ObjectId idDiag) throws IOException {
 		Diagnostic diagnostic = null;
-		System.out.println("envoi diagnostique ...");
+		System.out.println("envoi diagnostique ...0");
 		try (Socket socket = new Socket("localhost", 234)) {
 			// pour la recuperation
-
+			System.out.println("envoi diagnostique ...1");
 			// pour l'envoie
 			OutputStream outputStream = socket.getOutputStream();
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
@@ -427,16 +429,101 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
+	public List<Symptom> doit(){
+		List<Symptom> sympt = null;
+		System.out.println("Demande liste des symptomes");
+		try (Socket socket = new Socket(server, 234)) {
+			System.out.println("Connexion etablis avec systeme");
+			// pour la recuperation
 
+			// pour l'envoie
+			OutputStream outputStream = socket.getOutputStream();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+			Request req = new Request(null, 7);
+
+			objectOutputStream.writeObject(req);
+			System.out.println(req);
+			InputStream is = socket.getInputStream();
+			System.out.println(is);
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			sympt = (List<Symptom>) objectInputStream.readObject();
+			try {
+				is.close();
+				objectOutputStream.close();
+				socket.close();
+				System.out.println("fermeture session \n\n");
+
+			} catch (IOException i) {
+				System.out.println(i);
+			}
+		} catch (IOException e) {
+
+			System.out.println(e);
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+		return sympt;
+	}
+	public List<CronicDisease> doit2(){
+		List<CronicDisease> x=new ArrayList<CronicDisease>();
+		System.out.println("Demande liste des maladies");
+		try (Socket socket = new Socket(server, 234)) {
+			System.out.println("Connexion etablis avec systeme");
+			// pour la recuperation
+
+			// pour l'envoie
+			OutputStream outputStream = socket.getOutputStream();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+			Request req = new Request(null, 10);
+
+			objectOutputStream.writeObject(req);
+			System.out.println(req);
+			InputStream is = socket.getInputStream();
+			System.out.println(is);
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			x = (List<CronicDisease>) objectInputStream.readObject();
+			try {
+				is.close();
+				objectOutputStream.close();
+				socket.close();
+				System.out.println("fermeture session \n\n");
+
+			} catch (IOException i) {
+				System.out.println(i);
+			}
+		} catch (IOException e) {
+
+			System.out.println(e);
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+		return x;
+	}
 	public static void main(String[] args) {
 
-		Patient patient=new Patient(new ObjectId("623740f074ef0d449bbe60ec"),"","", null, null, null, null);
+		Patient patient=new Patient(new ObjectId("623740f074ef0d449bbe60ec"),"","", null, null, null, new Ville(new ObjectId("623719bb2f7a004ba90fea20"),"",new Region(new ObjectId("6237171cba758c64481615b1"), id, id, 0)));
 		//patient.set_id(new ObjectId("623740f074ef0d449bbe60ec"));
 		Diagnostic dia =new Diagnostic(patient, new Date());
-		System.out.println(dia.getPatient().get_id());
+		//System.out.println(dia.getPatient().get_id());
+		 List<Symptom>ls=new Controller().doit();
+		 List<CronicDisease> x=new Controller().doit2();
+		 dia.addSymptom(ls.get(0));
+		 dia.addSymptom(ls.get(1));
+		 dia.addSymptom(ls.get(2));
+		 dia.addSymptom(ls.get(3));
+		 dia.addSymptom(ls.get(7));
+		 dia.addSymptom(ls.get(9));
+		 dia.addCronic(x.get(0));
+		 dia.addCronic(x.get(1));
 		dia.setPatient(patient);
 		dia.setTemperature(39);
-		dia.getPatient().setAge(75);
+		dia.getPatient().setAge(45);
 		dia.setDate_diagnostic(new Date(0));
 		new Controller().Envo_diag(dia);
 

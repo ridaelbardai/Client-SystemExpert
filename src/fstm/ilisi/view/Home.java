@@ -93,21 +93,6 @@ public class Home extends JFrame {
 		}
 	}
 
-	// pour remplire la liste des symptomes dans un diagnostique
-//	void remplireSymptomes(Diagnostic dgstq, JList<String> list) {
-//		for (int i = 0; i < list.getModel().getSize(); i++) 
-//			dgstq.addSymptom();
-//	}
-
-	// pour remplire les maladies chroniques dans un diagnostique
-//	public void remplirMaladiesChroniques(JCheckBox cbd, JCheckBox cbc, JCheckBox cbh) {
-//		if (cbd.isSelected())
-//			maDiagnostique.addCronic(new CronicDisease());
-//		if (cbc.isSelected())
-//			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbc).getText(), 0));
-//		if (cbh.isSelected())
-//			maDiagnostique.AjouterMaladieC(new MaladieCronique(0, ((JCheckBox) cbh).getText(), 0));
-//	}
 
 	/**
 	 * Launch the application.
@@ -139,7 +124,7 @@ public class Home extends JFrame {
 		setForeground(Color.DARK_GRAY);
 		setBackground(new Color(192, 192, 192));
 		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
+				.getImage("D:\\Projet\\Client\\ClientSide\\recourses\\doctor.png"));
 		setResizable(false);
 		setAlwaysOnTop(true);
 		CardLayout CL = new CardLayout(0, 0);
@@ -168,7 +153,7 @@ public class Home extends JFrame {
 		JButton voirHistorique = new JButton("");
 
 		voirHistorique.setBorder(new EmptyBorder(0, 0, 0, 0));
-		voirHistorique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\history (1).png"));
+		voirHistorique.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\history (1).png"));
 		voirHistorique.setBounds(92, 134, 233, 186);
 		histo_consult.add(voirHistorique);
 
@@ -178,7 +163,7 @@ public class Home extends JFrame {
 				CL.show(contentPane, "panelDesSymptomes");
 			}
 		});
-		nouveauDiagnostique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\add-file.png"));
+		nouveauDiagnostique.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\add-file.png"));
 		nouveauDiagnostique.setBounds(469, 134, 233, 186);
 		histo_consult.add(nouveauDiagnostique);
 
@@ -202,7 +187,7 @@ public class Home extends JFrame {
 			}
 		});
 		btnRevenirVersIdentification
-				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
+				.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification.setBounds(10, 11, 30, 30);
 		histo_consult.add(btnRevenirVersIdentification);
 
@@ -236,7 +221,7 @@ public class Home extends JFrame {
 		Identification.add(image);
 
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\medical-record.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\medical-record.png"));
 		image.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_3 = new JLabel("Entrez le numero de votre dossier medical");
@@ -344,7 +329,7 @@ public class Home extends JFrame {
 
 		JPanel panelImg = new JPanel();
 		panelImg.setBounds(401, 36, 375, 384);
-		JLabel imgLabel = new JLabel(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
+		JLabel imgLabel = new JLabel(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\doctor.png"));
 		panelImg.add(imgLabel);
 
 		IUP_Center.add(panelImg);
@@ -362,7 +347,7 @@ public class Home extends JFrame {
 			}
 		});
 		btnRevenirVersIdentification_1
-				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
+				.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification_1.setForeground(Color.WHITE);
 		btnRevenirVersIdentification_1.setContentAreaFilled(false);
 		btnRevenirVersIdentification_1.setBorder(BorderFactory.createEmptyBorder());
@@ -505,7 +490,7 @@ public class Home extends JFrame {
 				CL.show(contentPane, "histo_consult");
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\test\\recourses\\icons8-back-50.png"));
+		btnNewButton_1.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\icons8-back-50.png"));
 		btnNewButton_1.setBounds(10, 11, 34, 35);
 		histoPanelCenter.add(btnNewButton_1);
 		String col[] = { "id", "date", "symptomes", "presence" };
