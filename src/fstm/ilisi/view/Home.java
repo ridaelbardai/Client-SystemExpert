@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -31,7 +32,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -55,17 +55,16 @@ public class Home extends JFrame {
 	 */
 	private Controller ctr;
 	private static final long serialVersionUID = 1L;
-	private Diagnostic maDiagnostique;
 	private JPanel contentPane;
 	private JTextField textFieldNom;
 	private JTextField textFieldPrenom;
 	private JTextField IdentifianttextField;
 	private JTable table;
+	private JTextField textFieldAdress;
 
 	/**
-	 * cette fonction sert a transferer 
-	 * les elements entre les deux listes
-	 * vers les deux sens 
+	 * cette fonction sert a transferer les elements entre les deux listes vers les
+	 * deux sens
 	 */
 	public <E> void moveSelectedTo(JList<E> from, JList<E> to) {
 		try {
@@ -130,15 +129,17 @@ public class Home extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Home() throws IOException {
-		ctr= new Controller();
+		ctr = new Controller();
 		setTitle("System Expert Covid19");
 		setForeground(Color.DARK_GRAY);
 		setBackground(new Color(192, 192, 192));
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
 		setResizable(false);
 		setAlwaysOnTop(true);
 		CardLayout CL = new CardLayout(0, 0);
@@ -163,13 +164,9 @@ public class Home extends JFrame {
 		JPanel histo_consult = new JPanel();
 		contentPane.add(histo_consult, "histo_consult");
 		histo_consult.setLayout(null);
-
+		
 		JButton voirHistorique = new JButton("");
-		voirHistorique.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CL.show(contentPane, "historique");
-			}
-		});
+
 		voirHistorique.setBorder(new EmptyBorder(0, 0, 0, 0));
 		voirHistorique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\history (1).png"));
 		voirHistorique.setBounds(92, 134, 233, 186);
@@ -178,7 +175,7 @@ public class Home extends JFrame {
 		JButton nouveauDiagnostique = new JButton("");
 		nouveauDiagnostique.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CL.show(contentPane, "InfoUserPanel");
+				CL.show(contentPane, "panelDesSymptomes");
 			}
 		});
 		nouveauDiagnostique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\add-file.png"));
@@ -204,21 +201,24 @@ public class Home extends JFrame {
 				CL.show(contentPane, "Identification");
 			}
 		});
-		btnRevenirVersIdentification.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
+		btnRevenirVersIdentification
+				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification.setBounds(10, 11, 30, 30);
 		histo_consult.add(btnRevenirVersIdentification);
 
 		JButton Commencer_btn = new JButton("Commencer");
+		// Verifier si patient existe ou non
 		Commencer_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = IdentifianttextField.getText();
-				if (id.equals("123")) {
+				if (ctr.VerifPat(id)) {
 					CL.show(contentPane, "histo_consult");
 				} else {
 					String message = "Vous n'avez pas encore un dossier ?";
 					int answer = JOptionPane.showConfirmDialog(contentPane, message);
 					if (answer == JOptionPane.YES_OPTION) {
 						// User clicked YES.
+						Controller.id = id;
 						CL.show(contentPane, "InfoUserPanel");
 					} else if (answer == JOptionPane.NO_OPTION) {
 
@@ -247,17 +247,16 @@ public class Home extends JFrame {
 		contentPane.add(InfoUserPanel, "InfoUserPanel");
 		InfoUserPanel.setLayout(new BorderLayout(0, 0));
 
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(159, 116, 113, 20);
+
 		JPanel IUP_South = new JPanel();
 		FlowLayout fl_IUP_South = (FlowLayout) IUP_South.getLayout();
 		fl_IUP_South.setAlignment(FlowLayout.RIGHT);
 		InfoUserPanel.add(IUP_South, BorderLayout.SOUTH);
-
+		// pour terminer l'inscription
 		JButton suivant = new JButton("Suivant");
-		suivant.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CL.next(contentPane);
-			}
-		});
+
 		IUP_South.add(suivant);
 
 		JPanel IUP_Center = new JPanel();
@@ -265,6 +264,8 @@ public class Home extends JFrame {
 		IUP_Center.setLayout(null);
 
 		JPanel panel = new JPanel();
+
+		panel.add(dateChooser);
 		panel.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Entrez vos informations : ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -281,7 +282,7 @@ public class Home extends JFrame {
 		lblPrenom.setBounds(24, 66, 93, 39);
 		panel.add(lblPrenom);
 		lblPrenom.setFont(new Font("Dialog", Font.BOLD, 15));
-		
+
 		UtilDateModel model = new UtilDateModel();
 		JDatePanelImpl datePanel = new JDatePanelImpl(model);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
@@ -303,36 +304,43 @@ public class Home extends JFrame {
 		panel.add(textFieldPrenom);
 		textFieldPrenom.setFont(new Font("Dialog", Font.PLAIN, 15));
 		textFieldPrenom.setColumns(10);
-		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(159, 116, 113, 20);
-		panel.add(dateChooser);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(153, 159, 119, 22);
-		comboBox.setModel(new DefaultComboBoxModel<String>(ctr.retreiveRegions()));
-		panel.add(comboBox);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(153, 209, 119, 22);
-		panel.add(comboBox_1);
 
-		comboBox.addActionListener(new ActionListener() {
+		JComboBox comboBoxRegions = new JComboBox();
+		comboBoxRegions.setBounds(153, 159, 119, 22);
+		comboBoxRegions.setModel(new DefaultComboBoxModel<String>(ctr.retreiveRegions()));
+		panel.add(comboBoxRegions);
+
+		JComboBox comboBoxVilles = new JComboBox();
+		comboBoxVilles.setBounds(153, 209, 119, 22);
+		panel.add(comboBoxVilles);
+
+		comboBoxRegions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String reg = comboBox.getSelectedItem().toString();
-				comboBox_1.setModel(new DefaultComboBoxModel<String>(ctr.VilleParreg(reg)));
+				String reg = comboBoxRegions.getSelectedItem().toString();
+				comboBoxVilles.setModel(new DefaultComboBoxModel<String>(ctr.VilleParreg(reg)));
 			}
 		});
-		
+
 		JLabel lblNewLabel_1_1_1 = new JLabel("Region :");
 		lblNewLabel_1_1_1.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblNewLabel_1_1_1.setBounds(24, 152, 93, 39);
 		panel.add(lblNewLabel_1_1_1);
-		
+
 		JLabel lblNewLabel_1_1_2 = new JLabel("ville :");
 		lblNewLabel_1_1_2.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblNewLabel_1_1_2.setBounds(24, 209, 93, 39);
+		lblNewLabel_1_1_2.setBounds(24, 199, 93, 39);
 		panel.add(lblNewLabel_1_1_2);
+
+		JLabel lblAdress = new JLabel("Adresse :");
+		lblAdress.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblAdress.setBounds(24, 242, 93, 39);
+		panel.add(lblAdress);
+
+		textFieldAdress = new JTextField();
+		textFieldAdress.setFont(new Font("Dialog", Font.PLAIN, 15));
+		textFieldAdress.setColumns(10);
+		textFieldAdress.setBounds(158, 246, 114, 39);
+		panel.add(textFieldAdress);
 
 		JPanel panelImg = new JPanel();
 		panelImg.setBounds(401, 36, 375, 384);
@@ -353,7 +361,8 @@ public class Home extends JFrame {
 				CL.previous(contentPane);
 			}
 		});
-		btnRevenirVersIdentification_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
+		btnRevenirVersIdentification_1
+				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification_1.setForeground(Color.WHITE);
 		btnRevenirVersIdentification_1.setContentAreaFilled(false);
 		btnRevenirVersIdentification_1.setBorder(BorderFactory.createEmptyBorder());
@@ -401,7 +410,7 @@ public class Home extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(28, 85, 305, 149);
 		panel_symptomes.add(scrollPane);
-		//remplire liste des symptomes
+		// remplire liste des symptomes
 		String[] values = ctr.retreiveSymptoms();
 		DefaultListModel<String> listModelsrc = new DefaultListModel<String>();
 		for (int i = 0; i < values.length; i++) {
@@ -440,10 +449,10 @@ public class Home extends JFrame {
 		});
 		btnNewButton_3.setBounds(343, 154, 98, 26);
 		panel_symptomes.add(btnNewButton_3);
-		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Vous etiez en contact avec quelequ'un");
-		chckbxNewCheckBox.setBounds(290, 290, 218, 23);
-		panel_symptomes.add(chckbxNewCheckBox);
+
+		JCheckBox chckbxContact = new JCheckBox("Vous etiez en contact avec quelequ'un");
+		chckbxContact.setBounds(290, 290, 218, 23);
+		panel_symptomes.add(chckbxContact);
 
 		JPanel panel_maladiesChroniques = new JPanel();
 		PDS_Center.add(panel_maladiesChroniques, BorderLayout.SOUTH);
@@ -471,26 +480,13 @@ public class Home extends JFrame {
 		cbHypertendu.setFont(new Font("Dialog", Font.BOLD, 15));
 		panel_CheckBoxs.add(cbHypertendu);
 
-		//Button d'envoi du diagnostique 
+		// Button d'envoi du diagnostique
 		JButton Terminer = new JButton("Terminer");
 		Terminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//creation d'un patient
-//				Patient p = new Patient(0, textFieldNom.getText(), textFieldPrenom.getText(), "khadija21", "1234", null,
-//						"hay mohammadi", new Ville(0, "title", new Region(0, getName())));
-//				p.setAge((int) spinnerAge.getValue());
-//				p.setTemperature((int) spinnerTemperature.getValue());
-//				//creation du diagnostique
-//				maDiagnostique = new Diagnostique(p, null, 0);
-//				remplirMaladiesChroniques(cbDiabete, cbCardiaque, cbHypertendu);
-//				remplireSymptomes(maDiagnostique, list_dst);
-				try {
-					// appel du controlleur pour executer l'action envoyerDiagnostique()
-					new Controller().envoyerDiagnostique(maDiagnostique);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-
+				// appel du controlleur pour executer l'action envoyerDiagnostique()
+				ctr.effectuerDiagnostique((int) spinnerTemperature.getValue(), list_dst, chckbxContact, cbDiabete,
+						cbCardiaque, cbHypertendu);
 			}
 		});
 		PDS_South.add(Terminer);
@@ -512,17 +508,39 @@ public class Home extends JFrame {
 		btnNewButton_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\test\\recourses\\icons8-back-50.png"));
 		btnNewButton_1.setBounds(10, 11, 34, 35);
 		histoPanelCenter.add(btnNewButton_1);
+		String col[] = { "id", "date", "symptomes", "presence" };
 
-		table = new JTable();
-		table.setRowSelectionAllowed(false);
-		table.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		table.setEnabled(false);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "id", "Date", "Symptomes", "Resultat", "Commentaire" }));
-		table.setBorder(UIManager.getBorder("PasswordField.border"));
-		table.setBounds(10, 121, 766, 231);
+		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+		table = new JTable(tableModel);
+		table.setBounds(58, 135, 667, 248);
 		histoPanelCenter.add(table);
 
+		voirHistorique.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CL.show(contentPane, "historique");
+				try {
+					List<Diagnostic> l = ctr.retreiveDiagnostiques(Controller.p.getIdentifiant());
+					for (Diagnostic d : l) {
+						Object[] objs = { d.get_id(), d.getDate_diagnostic(), d.getSymptomes(), d.getPossi_presence() };
+						tableModel.addRow(objs);
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		suivant.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String nom = textFieldNom.getText();
+				String prenom = textFieldPrenom.getText();
+				String adress = textFieldAdress.getText();
+				String identifiant = Controller.id;
+				Date datenaiss = dateChooser.getDate();
+				String ville = comboBoxVilles.getSelectedItem().toString();
+				ctr.ctrInscrip(nom, prenom, identifiant, datenaiss, adress, ville);
+				CL.show(contentPane, "panelDesSymptomes");
+			}
+		});
 	}
 }
