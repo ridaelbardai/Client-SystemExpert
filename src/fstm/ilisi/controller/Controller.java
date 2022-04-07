@@ -27,7 +27,7 @@ import ma.fstm.ilisi.projet.model.service.Request;
 
 public class Controller {
 
-	String server = "192.168.43.10";
+	String server = "localhost";
 	public static Patient p;
 	public static String id;
 
@@ -43,7 +43,6 @@ public class Controller {
 			diagno.addCronic(new CronicDisease(((JCheckBox) cbh).getText()));
 
 		if (contact.isSelected()) {
-//			diagno.addSymptom(new Symptom("contact covid"));
 			diagno.setContact(true);
 		}
 		if(temperature > 38) {

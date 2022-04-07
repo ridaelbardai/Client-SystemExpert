@@ -7,7 +7,10 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -49,6 +51,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.bson.types.ObjectId;
 
+import com.itextpdf.awt.geom.Line2D;
 import com.toedter.calendar.JDateChooser;
 
 import fstm.ilisi.controller.Controller;
@@ -57,7 +60,7 @@ import ma.fstm.ilisi.projet.model.service.Historique;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
-import java.awt.SystemColor;
+import javax.swing.border.LineBorder;
 
 class notification extends Thread {
 
@@ -87,6 +90,7 @@ public class Home extends JFrame {
 	/**
 	 * 
 	 */
+
 	private List<String[]> regions;
 	private Controller ctr;
 	private static final long serialVersionUID = 1L;
@@ -147,11 +151,13 @@ public class Home extends JFrame {
 			}
 		});
 	}
+
 	String remplirLabel(String[] infos) {
-		
-		return infos[0]+" :\ncas positifs :"+infos[1]+"\nguérris :"+infos[2]+"\nmorts :"+infos[3];
-		
+
+		return infos[0] + " :\ncas positifs :" + infos[1] + "\nguérris :" + infos[2] + "\nmorts :" + infos[3];
+
 	}
+
 	/**
 	 * Create the frame.
 	 * 
@@ -159,6 +165,7 @@ public class Home extends JFrame {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Home() throws IOException {
+
 		ctr = new Controller();
 		this.regions = ctr.retreiveStatistiques();
 		setTitle("System Expert Covid19");
@@ -169,7 +176,7 @@ public class Home extends JFrame {
 		setResizable(false);
 		CardLayout CL = new CardLayout(0, 0);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 812, 630);
+		setBounds(100, 100, 952, 714);
 		contentPane = new JPanel();
 		contentPane.setToolTipText("");
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -179,81 +186,10 @@ public class Home extends JFrame {
 		JPanel Identification = new JPanel();
 		contentPane.add(Identification, "Identification");
 		Identification.setLayout(null);
-		
-				JTextPane lblNewLabeltanger = new JTextPane();
-				lblNewLabeltanger.setBackground(SystemColor.controlHighlight);
-				lblNewLabeltanger.setEditable(false);
-				lblNewLabeltanger.setBounds(369, 11, 112, 78);
-				Identification.add(lblNewLabeltanger);
-		
-				JTextPane lblNewLabelmerrakech = new JTextPane();
-				lblNewLabelmerrakech.setBounds(272, 123, 112, 65);
-				Identification.add(lblNewLabelmerrakech);
-		
-				JTextPane lblNewLabelrabat = new JTextPane();
-				lblNewLabelrabat.setBounds(69, 32, 112, 65);
-				Identification.add(lblNewLabelrabat);
-		
-				JTextPane lblNewLabelfes = new JTextPane();
-				lblNewLabelfes.setBackground(SystemColor.controlHighlight);
-				lblNewLabelfes.setEditable(false);
-				lblNewLabelfes.setBounds(501, 237, 112, 65);
-				Identification.add(lblNewLabelfes);
-		
-				JTextPane lblNewLabelbenimellal = new JTextPane();
-				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-				lblNewLabelbenimellal.setEditable(false);
-				lblNewLabelbenimellal.setBounds(623, 193, 112, 65);
-				Identification.add(lblNewLabelbenimellal);
-				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-				lblNewLabelbenimellal.setEditable(false);
-				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-				lblNewLabelbenimellal.setEditable(false);
-				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-				lblNewLabelbenimellal.setEditable(false);
-				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-				lblNewLabelbenimellal.setEditable(false);
-				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-				lblNewLabelbenimellal.setEditable(false);
-				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-				lblNewLabelbenimellal.setEditable(false);
-		
-				JTextPane lblNewLabelguelmim = new JTextPane();
-				lblNewLabelguelmim.setBounds(20, 253, 112, 65);
-				Identification.add(lblNewLabelguelmim);
-		
-				JTextPane lblNewLabelagadir = new JTextPane();
-				lblNewLabelagadir.setBounds(100, 100, 112, 65);
-				Identification.add(lblNewLabelagadir);
-		
-				JTextPane lblNewLabeldakhla = new JTextPane();
-				lblNewLabeldakhla.setBackground(SystemColor.controlHighlight);
-				lblNewLabeldakhla.setEditable(false);
-				lblNewLabeldakhla.setBounds(86, 358, 112, 65);
-				Identification.add(lblNewLabeldakhla);
-		
-				JTextPane lblNewLabelerrachidia = new JTextPane();
-				lblNewLabelerrachidia.setBackground(SystemColor.controlHighlight);
-				lblNewLabelerrachidia.setEditable(false);
-				lblNewLabelerrachidia.setBounds(623, 328, 112, 65);
-				Identification.add(lblNewLabelerrachidia);
-		
-				JTextPane lblNewLabeloujda = new JTextPane();
-				lblNewLabeloujda.setBounds(674, 11, 112, 65);
-				Identification.add(lblNewLabeloujda);
-		
-				JTextPane lblNewLabellaayoun = new JTextPane();
-				lblNewLabellaayoun.setBounds(163, 237, 112, 65);
-				Identification.add(lblNewLabellaayoun);
-		JTextPane lblNewLabelcasa = new JTextPane();
-		lblNewLabelcasa.setBackground(SystemColor.controlHighlight);
-		lblNewLabelcasa.setEditable(false);
-		lblNewLabelcasa.setBounds(234, 47, 112, 65);
-		Identification.add(lblNewLabelcasa);
 
 		IdentifianttextField = new JTextField();
 		IdentifianttextField.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		IdentifianttextField.setBounds(267, 471, 248, 50);
+		IdentifianttextField.setBounds(342, 552, 258, 50);
 		Identification.add(IdentifianttextField);
 		IdentifianttextField.setColumns(10);
 
@@ -265,7 +201,7 @@ public class Home extends JFrame {
 
 		voirHistorique.setBorder(new EmptyBorder(0, 0, 0, 0));
 		voirHistorique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\history (1).png"));
-		voirHistorique.setBounds(92, 134, 233, 186);
+		voirHistorique.setBounds(92, 47, 361, 305);
 		histo_consult.add(voirHistorique);
 
 		JButton nouveauDiagnostique = new JButton("");
@@ -275,17 +211,17 @@ public class Home extends JFrame {
 			}
 		});
 		nouveauDiagnostique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\add-file.png"));
-		nouveauDiagnostique.setBounds(469, 134, 233, 186);
+		nouveauDiagnostique.setBounds(469, 47, 361, 305);
 		histo_consult.add(nouveauDiagnostique);
 
 		JLabel Consulter_historique_label = new JLabel("Consulter historique");
 		Consulter_historique_label.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		Consulter_historique_label.setBounds(150, 98, 130, 25);
+		Consulter_historique_label.setBounds(210, 11, 130, 25);
 		histo_consult.add(Consulter_historique_label);
 
 		JLabel Diagnostique_Label = new JLabel("Diagnostique");
 		Diagnostique_Label.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		Diagnostique_Label.setBounds(549, 98, 97, 25);
+		Diagnostique_Label.setBounds(606, 11, 97, 25);
 		histo_consult.add(Diagnostique_Label);
 
 		JButton btnRevenirVersIdentification = new JButton("");
@@ -301,10 +237,11 @@ public class Home extends JFrame {
 				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\test\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification.setBounds(10, 11, 30, 30);
 		histo_consult.add(btnRevenirVersIdentification);
-
-		JButton btnNewButton_5 = new JButton("New button");
-		btnNewButton_5.setBounds(347, 416, 89, 23);
-		histo_consult.add(btnNewButton_5);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\images\\protection.jpg"));
+		lblNewLabel_1.setBounds(24, 363, 892, 291);
+		histo_consult.add(lblNewLabel_1);
 
 		JButton Commencer_btn = new JButton("Commencer");
 		// Verifier si patient existe ou non
@@ -334,17 +271,99 @@ public class Home extends JFrame {
 			}
 		});
 		Commencer_btn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		Commencer_btn.setBounds(285, 529, 196, 41);
+		Commencer_btn.setBounds(373, 613, 196, 41);
 		Identification.add(Commencer_btn);
 
 		JLabel lblNewLabel_3 = new JLabel("Entrez le numero de votre dossier medical");
-		lblNewLabel_3.setBounds(285, 449, 200, 22);
+		lblNewLabel_3.setFont(new Font("Segoe UI Semilight", Font.PLAIN, 13));
+		lblNewLabel_3.setBounds(352, 530, 248, 22);
 		Identification.add(lblNewLabel_3);
 
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\marocresized.png"));
-		lblNewLabel_1.setBounds(10, -10, 776, 448);
-		Identification.add(lblNewLabel_1);
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Covid19 au maroc en chiffres :",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel_1.setBounds(4, -2, 912, 521);
+		Identification.add(panel_1);
+		panel_1.setLayout(null);
+		
+				JTextPane lblNewLabeltanger = new JTextPane();
+				lblNewLabeltanger.setBounds(460, 11, 112, 78);
+				panel_1.add(lblNewLabeltanger);
+				lblNewLabeltanger.setBackground(SystemColor.controlHighlight);
+				lblNewLabeltanger.setEditable(false);
+				
+						JTextPane lblNewLabelrabat = new JTextPane();
+						lblNewLabelrabat.setBounds(338, 48, 112, 65);
+						panel_1.add(lblNewLabelrabat);
+						lblNewLabelrabat.setBackground(SystemColor.controlHighlight);
+						lblNewLabelrabat.setEditable(false);
+						
+								JTextPane lblNewLabelguelmim = new JTextPane();
+								lblNewLabelguelmim.setBounds(116, 202, 112, 65);
+								panel_1.add(lblNewLabelguelmim);
+								lblNewLabelguelmim.setBackground(SystemColor.controlHighlight);
+								lblNewLabelguelmim.setEditable(false);
+								
+										JTextPane lblNewLabelfes = new JTextPane();
+										lblNewLabelfes.setBounds(744, 202, 112, 65);
+										panel_1.add(lblNewLabelfes);
+										lblNewLabelfes.setBackground(SystemColor.controlHighlight);
+										lblNewLabelfes.setEditable(false);
+										
+												JTextPane lblNewLabelerrachidia = new JTextPane();
+												lblNewLabelerrachidia.setBounds(622, 244, 112, 65);
+												panel_1.add(lblNewLabelerrachidia);
+												lblNewLabelerrachidia.setBackground(SystemColor.controlHighlight);
+												lblNewLabelerrachidia.setEditable(false);
+												
+														JTextPane lblNewLabeldakhla = new JTextPane();
+														lblNewLabeldakhla.setBounds(251, 445, 112, 65);
+														panel_1.add(lblNewLabeldakhla);
+														lblNewLabeldakhla.setBackground(SystemColor.controlHighlight);
+														lblNewLabeldakhla.setEditable(false);
+														
+														JTextPane lblNewLabellaayoun = new JTextPane();
+														lblNewLabellaayoun.setBounds(338, 370, 112, 65);
+														panel_1.add(lblNewLabellaayoun);
+														lblNewLabellaayoun.setBackground(SystemColor.controlHighlight);
+														lblNewLabellaayoun.setEditable(false);
+														
+																JTextPane lblNewLabelagadir = new JTextPane();
+																lblNewLabelagadir.setBounds(466, 340, 112, 65);
+																panel_1.add(lblNewLabelagadir);
+																lblNewLabelagadir.setBackground(SystemColor.controlHighlight);
+																lblNewLabelagadir.setEditable(false);
+																
+																		JTextPane lblNewLabelbenimellal = new JTextPane();
+																		lblNewLabelbenimellal.setBounds(500, 264, 112, 65);
+																		panel_1.add(lblNewLabelbenimellal);
+																		lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+																		lblNewLabelbenimellal.setEditable(false);
+																		
+																		JTextPane lblNewLabelcasa = new JTextPane();
+																		lblNewLabelcasa.setBounds(304, 124, 112, 65);
+																		panel_1.add(lblNewLabelcasa);
+																		lblNewLabelcasa.setBackground(SystemColor.controlHighlight);
+																		lblNewLabelcasa.setEditable(false);
+																		
+																				JTextPane lblNewLabeloujda = new JTextPane();
+																				lblNewLabeloujda.setBounds(776, 24, 112, 65);
+																				panel_1.add(lblNewLabeloujda);
+																				lblNewLabeloujda.setBackground(SystemColor.control);
+																				lblNewLabeloujda.setEditable(false);
+																				
+																						JTextPane lblNewLabelmerrakech = new JTextPane();
+																						lblNewLabelmerrakech.setBounds(238, 202, 112, 65);
+																						panel_1.add(lblNewLabelmerrakech);
+																						lblNewLabelmerrakech.setBackground(SystemColor.controlHighlight);
+																						lblNewLabelmerrakech.setEditable(false);
+																						
+																								JLabel carteMaroc = new JLabel("");
+																								carteMaroc.setBounds(28, 27, 855, 494);
+																								panel_1.add(carteMaroc);
+																								carteMaroc.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\marocresized.png"));
+
+		
 
 		/******************************************************************************************************************************************/
 
@@ -386,7 +405,7 @@ public class Home extends JFrame {
 			case "Tanger-Tétouan-Al Hoceima":
 				lblNewLabeltanger.setText(remplirLabel(region));
 				break;
-				
+
 			default:
 				break;
 			}
@@ -399,7 +418,7 @@ public class Home extends JFrame {
 		InfoUserPanel.setLayout(new BorderLayout(0, 0));
 
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(159, 116, 113, 20);
+		dateChooser.setBounds(159, 172, 205, 20);
 
 		JPanel IUP_South = new JPanel();
 		FlowLayout fl_IUP_South = (FlowLayout) IUP_South.getLayout();
@@ -420,7 +439,7 @@ public class Home extends JFrame {
 		panel.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Entrez vos informations : ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.setBounds(32, 11, 335, 409);
+		panel.setBounds(10, 11, 382, 559);
 		IUP_Center.add(panel);
 		panel.setLayout(null);
 
@@ -430,7 +449,7 @@ public class Home extends JFrame {
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 15));
 
 		JLabel lblPrenom = new JLabel("Prenom :");
-		lblPrenom.setBounds(24, 66, 93, 39);
+		lblPrenom.setBounds(24, 91, 93, 39);
 		panel.add(lblPrenom);
 		lblPrenom.setFont(new Font("Dialog", Font.BOLD, 15));
 
@@ -440,29 +459,29 @@ public class Home extends JFrame {
 		panel.add(datePicker);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Age :");
-		lblNewLabel_1_1.setBounds(24, 102, 93, 39);
+		lblNewLabel_1_1.setBounds(24, 158, 93, 39);
 		panel.add(lblNewLabel_1_1);
 		lblNewLabel_1_1.setFont(new Font("Dialog", Font.BOLD, 15));
 
 		textFieldNom = new JTextField();
-		textFieldNom.setBounds(158, 25, 114, 30);
+		textFieldNom.setBounds(159, 29, 206, 30);
 		panel.add(textFieldNom);
 		textFieldNom.setFont(new Font("Dialog", Font.PLAIN, 15));
 		textFieldNom.setColumns(10);
 
 		textFieldPrenom = new JTextField();
-		textFieldPrenom.setBounds(158, 70, 114, 30);
+		textFieldPrenom.setBounds(158, 95, 206, 30);
 		panel.add(textFieldPrenom);
 		textFieldPrenom.setFont(new Font("Dialog", Font.PLAIN, 15));
 		textFieldPrenom.setColumns(10);
 
 		JComboBox comboBoxRegions = new JComboBox();
-		comboBoxRegions.setBounds(153, 159, 119, 22);
+		comboBoxRegions.setBounds(160, 254, 204, 22);
 		comboBoxRegions.setModel(new DefaultComboBoxModel<String>(ctr.retreiveRegions()));
 		panel.add(comboBoxRegions);
 
 		JComboBox comboBoxVilles = new JComboBox();
-		comboBoxVilles.setBounds(153, 209, 119, 22);
+		comboBoxVilles.setBounds(160, 330, 204, 22);
 		panel.add(comboBoxVilles);
 
 		comboBoxRegions.addActionListener(new ActionListener() {
@@ -474,28 +493,28 @@ public class Home extends JFrame {
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Region :");
 		lblNewLabel_1_1_1.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblNewLabel_1_1_1.setBounds(24, 152, 93, 39);
+		lblNewLabel_1_1_1.setBounds(24, 247, 93, 39);
 		panel.add(lblNewLabel_1_1_1);
 
 		JLabel lblNewLabel_1_1_2 = new JLabel("ville :");
 		lblNewLabel_1_1_2.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblNewLabel_1_1_2.setBounds(24, 199, 93, 39);
+		lblNewLabel_1_1_2.setBounds(24, 320, 93, 39);
 		panel.add(lblNewLabel_1_1_2);
 
 		JLabel lblAdress = new JLabel("Adresse :");
 		lblAdress.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblAdress.setBounds(24, 242, 93, 39);
+		lblAdress.setBounds(24, 398, 93, 39);
 		panel.add(lblAdress);
 
 		textFieldAdress = new JTextField();
 		textFieldAdress.setFont(new Font("Dialog", Font.PLAIN, 15));
 		textFieldAdress.setColumns(10);
-		textFieldAdress.setBounds(158, 246, 114, 39);
+		textFieldAdress.setBounds(158, 402, 206, 112);
 		panel.add(textFieldAdress);
 
 		JPanel panelImg = new JPanel();
-		panelImg.setBounds(401, 36, 375, 384);
-		JLabel imgLabel = new JLabel(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
+		panelImg.setBounds(401, 36, 515, 534);
+		JLabel imgLabel = new JLabel(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\images\\inscription.png"));
 		panelImg.add(imgLabel);
 
 		IUP_Center.add(panelImg);
@@ -547,49 +566,39 @@ public class Home extends JFrame {
 		panel_temperature.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JSpinner spinnerTemperature = new JSpinner();
+		spinnerTemperature.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		spinnerTemperature.setModel(new SpinnerNumberModel(37, null, 45, 1));
 		panel_temperature.add(spinnerTemperature);
 
-		JLabel label_temperature = new JLabel("Temperature : ");
-		label_temperature.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		panel_temperature.add(label_temperature);
+		JLabel lblTemperature = new JLabel("Temperature ");
+		lblTemperature.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		panel_temperature.add(lblTemperature);
 
 		JPanel panel_symptomes = new JPanel();
 		PDS_Center.add(panel_symptomes, BorderLayout.CENTER);
 		panel_symptomes.setLayout(null);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(28, 85, 305, 149);
-		panel_symptomes.add(scrollPane);
 		// remplire liste des symptomes
 		String[] values = ctr.retreiveSymptoms();
 		DefaultListModel<String> listModelsrc = new DefaultListModel<String>();
 		for (int i = 0; i < values.length - 1; i++) {
 			listModelsrc.addElement(values[i]);
 		}
-		JList<String> list_src = new JList<String>(listModelsrc);
-		list_src.setVisibleRowCount(10);
-		scrollPane.setViewportView(list_src);
-		list_src.setFont(new Font("Tahoma", Font.PLAIN, 13));
-
-		list_src.setToolTipText("");
-		list_src.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		list_src.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 
 		DefaultListModel listModeldst = new DefaultListModel();
 		JList<String> list_dst = new JList<String>();
 		list_dst.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list_dst.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		list_dst.setBounds(451, 85, 305, 149);
+		list_dst.setBounds(572, 106, 305, 282);
 		panel_symptomes.add(list_dst);
 
+		JList<String> list_src = new JList<String>(listModelsrc);
 		JButton btnNewButton_2 = new JButton(">>");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				moveSelectedTo(list_src, list_dst);
 			}
 		});
-		btnNewButton_2.setBounds(343, 117, 98, 26);
+		btnNewButton_2.setBounds(390, 118, 130, 87);
 		panel_symptomes.add(btnNewButton_2);
 
 		JButton btnNewButton_3 = new JButton("<<");
@@ -598,12 +607,20 @@ public class Home extends JFrame {
 				moveSelectedTo(list_dst, list_src);
 			}
 		});
-		btnNewButton_3.setBounds(343, 154, 98, 26);
+		btnNewButton_3.setBounds(390, 272, 130, 87);
 		panel_symptomes.add(btnNewButton_3);
 
 		JCheckBox chckbxContact = new JCheckBox("Vous etiez en contact avec quelequ'un");
-		chckbxContact.setBounds(290, 290, 218, 23);
+		chckbxContact.setBounds(617, 396, 218, 23);
 		panel_symptomes.add(chckbxContact);
+		list_src.setBounds(38, 106, 305, 282);
+		panel_symptomes.add(list_src);
+		list_src.setVisibleRowCount(10);
+		list_src.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		
+				list_src.setToolTipText("");
+				list_src.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+				list_src.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 
 		JPanel panel_maladiesChroniques = new JPanel();
 		PDS_Center.add(panel_maladiesChroniques, BorderLayout.SOUTH);
@@ -668,7 +685,7 @@ public class Home extends JFrame {
 		DefaultTableModel tableModel = new DefaultTableModel(null, col);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(20, 56, 756, 313);
+		scrollPane_1.setBounds(10, 56, 906, 321);
 		histoPanelCenter.add(scrollPane_1);
 		table = new JTable(tableModel);
 		table.setCellSelectionEnabled(true);
@@ -678,6 +695,7 @@ public class Home extends JFrame {
 		table.setFont(new Font("Tahoma", Font.PLAIN, 17));
 
 		JButton btnNewButton_4 = new JButton("Imprimer");
+		btnNewButton_4.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\images\\icons8-pdf-48.png"));
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object value = table.getModel().getValueAt(table.getSelectedRow(), 0);
@@ -698,8 +716,12 @@ public class Home extends JFrame {
 				}
 			}
 		});
-		btnNewButton_4.setBounds(343, 421, 89, 23);
+		btnNewButton_4.setBounds(393, 444, 136, 86);
 		histoPanelCenter.add(btnNewButton_4);
+		
+		JLabel lblNewLabel_4 = new JLabel("Selectionez l'identifiant du diagnostique que vous voulez t\u00E9l\u00E9charger\r\n");
+		lblNewLabel_4.setBounds(20, 392, 335, 14);
+		histoPanelCenter.add(lblNewLabel_4);
 		Button impPdf = new Button("imprimer");
 		voirHistorique.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
