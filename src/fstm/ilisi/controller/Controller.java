@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import org.bson.types.ObjectId;
 
@@ -21,11 +22,12 @@ import ma.fstm.ilisi.projet.model.bo.Patient;
 import ma.fstm.ilisi.projet.model.bo.Region;
 import ma.fstm.ilisi.projet.model.bo.Symptom;
 import ma.fstm.ilisi.projet.model.bo.Ville;
+import ma.fstm.ilisi.projet.model.service.Historique;
 import ma.fstm.ilisi.projet.model.service.Request;
 
 public class Controller {
 
-	String server = "localhost";
+	String server = "172.17.36.144";
 	public static Patient p;
 	public static String id;
 
@@ -41,8 +43,11 @@ public class Controller {
 			diagno.addCronic(new CronicDisease(((JCheckBox) cbh).getText()));
 
 		if (contact.isSelected()) {
-			diagno.addSymptom(new Symptom("contact covid"));
+//			diagno.addSymptom(new Symptom("contact covid"));
 			diagno.setContact(true);
+		}
+		if(temperature > 38) {
+			diagno.addSymptom(new Symptom("fievre"));
 		}
 		for (int i = 0; i < listeDesSymptomes.getModel().getSize(); i++)
 			diagno.addSymptom(new Symptom(listeDesSymptomes.getModel().getElementAt(i)));
@@ -54,6 +59,7 @@ public class Controller {
 		try {
 			System.out.println(diagno);
 			this.Envo_diag(diagno);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,9 +104,18 @@ public class Controller {
 			e.printStackTrace();
 		}
 //		System.out.println(sympt);
-		String[] sy = new String[sympt.size()];
+		for(Symptom si :sympt)
+		{
+			if(si.getSymName().equalsIgnoreCase("fievre"))
+				{
+					sympt.remove(si);break;
+				}
+		}
+		
+		String[] sy= new String[sympt.size()];
 		for (int i = 0; i < sympt.size(); i++) {
-			sy[i] = sympt.get(i).getSymName();
+			//if(!sympt.get(i).getSymName().equalsIgnoreCase("fievre"))
+				sy[i] = sympt.get(i).getSymName();
 		}
 		return sy;
 	}
@@ -248,6 +263,7 @@ public class Controller {
 			ObjectInputStream objectInputStream = new ObjectInputStream(is);
 			System.out.println("Connexion reussite !");
 			p = (Patient) objectInputStream.readObject();
+			this.p = p;
 			try {
 				is.close();
 				objectOutputStream.close();
@@ -267,13 +283,11 @@ public class Controller {
 
 	}
 
-	public void Envo_diag(Diagnostic d)
-	{ 
-		Diagnostic p = new Diagnostic() ;
+	public void Envo_diag(Diagnostic d) {
+		Diagnostic p = new Diagnostic();
 		System.out.println("envoi diagnostique ...");
-		try (Socket socket = new Socket("localhost", 234)) {
+		try (Socket socket = new Socket(server, 234)) {
 			// pour la recuperation
-			
 
 			// pour l'envoie
 			OutputStream outputStream = socket.getOutputStream();
@@ -288,7 +302,12 @@ public class Controller {
 			System.out.println(is);
 			ObjectInputStream objectInputStream = new ObjectInputStream(is);
 			System.out.println("Connexion reussite !");
-			p = (Diagnostic)objectInputStream.readObject();
+			p = (Diagnostic) objectInputStream.readObject();
+			JOptionPane.showMessageDialog(null,
+					"Possibilite de presence du covid 19 : " + p.getPossi_presence()*100
+							+ "% \nvotre diagnostique a ete envoye au docteur ",
+					"Votre Diagnostic est dangereuse", JOptionPane.PLAIN_MESSAGE);
+			
 			try {
 				is.close();
 				objectOutputStream.close();
@@ -303,16 +322,15 @@ public class Controller {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-		
-		
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Diagnostic> retreiveDiagnostiques(String identifier) throws IOException {
 		List<Diagnostic> diagnostic = null;
 		System.out.println("Demande des diagnostiques");
-		try (Socket socket = new Socket("localhost", 234)) {
+		try (Socket socket = new Socket(server, 234)) {
 			System.out.println("Connexion reussite !");
 			// pour l'envoie
 			OutputStream outputStream = socket.getOutputStream();
@@ -347,7 +365,7 @@ public class Controller {
 	public Diagnostic AffichageDiagnostique(ObjectId idDiag) throws IOException {
 		Diagnostic diagnostic = null;
 		System.out.println("envoi diagnostique ...0");
-		try (Socket socket = new Socket("localhost", 234)) {
+		try (Socket socket = new Socket(server, 234)) {
 			// pour la recuperation
 			System.out.println("envoi diagnostique ...1");
 			// pour l'envoie
@@ -380,23 +398,63 @@ public class Controller {
 		return diagnostic;
 	}
 
-//	public Ville StringToVille(String stringVille) {
-//		Ville ville;
-//		return ville;
-//	}
-
+	
+	
+	public Ville FindVilleParNom(String strVille) throws IOException {
+		Ville ville = null;
+		try (Socket socket = new Socket(server, 234)) {
+			// pour la recuperation
+			System.out.println("demande ville par nom");
+			// pour l'envoie
+			OutputStream outputStream = socket.getOutputStream();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+			Request req = new Request(strVille, 11);
+			objectOutputStream.writeObject(req);
+			System.out.println(req);
+			System.out.println("Connexion reussite 11!");
+			InputStream is = socket.getInputStream();
+			System.out.println(is);
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			System.out.println("Connexion reussite !");
+			ville = (Ville) objectInputStream.readObject();
+			try {
+				is.close();
+				objectOutputStream.close();
+				socket.close();
+			} catch (IOException i) {
+				System.out.println(i);
+			}
+		} catch (IOException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println(ville);
+		System.out.println("Connexion reussite 11!");
+		return ville;
+	}
+	
 	public void ctrInscrip(String nom, String prenom, String identifiant, Date dateNaissance, String adresse,
 			String ville) {
 
 		System.out.println(nom + " " + prenom + " " + identifiant);
-		// Patient p = new Patient(nom, prenom, identifiant, dateNaissance, adresse,
-		// ville);
+		Ville v=null;
+		try {
+			v = FindVilleParNom(ville);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Patient p = new Patient(nom, prenom, identifiant, dateNaissance, adresse, v);
+		Inscription(p);
+		
+
 	}
 
 	public void envoyerDiagnostique(Diagnostic dia) throws IOException {
 		Diagnostic p = new Diagnostic();
 		System.out.println("envoi diagnostique ...");
-		try (Socket socket = new Socket("localhost", 234)) {
+		try (Socket socket = new Socket(server, 234)) {
 			// pour la recuperation
 
 			// pour l'envoie
@@ -429,7 +487,8 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	public List<Symptom> doit(){
+
+	public List<Symptom> doit() {
 		List<Symptom> sympt = null;
 		System.out.println("Demande liste des symptomes");
 		try (Socket socket = new Socket(server, 234)) {
@@ -467,8 +526,9 @@ public class Controller {
 		}
 		return sympt;
 	}
-	public List<CronicDisease> doit2(){
-		List<CronicDisease> x=new ArrayList<CronicDisease>();
+
+	public List<CronicDisease> doit2() {
+		List<CronicDisease> x = new ArrayList<CronicDisease>();
 		System.out.println("Demande liste des maladies");
 		try (Socket socket = new Socket(server, 234)) {
 			System.out.println("Connexion etablis avec systeme");
@@ -505,27 +565,69 @@ public class Controller {
 		}
 		return x;
 	}
+
+	public List<Historique> afficherHistorique(ObjectId id) {
+		List<Historique> x = new ArrayList<Historique>();
+		System.out.println("Demande liste des maladies");
+		try (Socket socket = new Socket(server, 234)) {
+			System.out.println("Connexion etablis avec systeme");
+			// pour la recuperation
+
+			// pour l'envoie
+			OutputStream outputStream = socket.getOutputStream();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+			Request req = new Request(id, 8);
+
+			objectOutputStream.writeObject(req);
+			System.out.println(req);
+			InputStream is = socket.getInputStream();
+			System.out.println(is);
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			x = (List<Historique>) objectInputStream.readObject();
+			try {
+				is.close();
+				objectOutputStream.close();
+				socket.close();
+				System.out.println("fermeture session \n\n");
+
+			} catch (IOException i) {
+				System.out.println(i);
+			}
+		} catch (IOException e) {
+
+			System.out.println(e);
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+		return x;
+	}
+
 	public static void main(String[] args) {
 
-		Patient patient=new Patient(new ObjectId("623740f074ef0d449bbe60ec"),"","", null, null, null, new Ville(new ObjectId("623719bb2f7a004ba90fea20"),"",new Region(new ObjectId("6237171cba758c64481615b1"), id, id, 0)));
-		//patient.set_id(new ObjectId("623740f074ef0d449bbe60ec"));
-		Diagnostic dia =new Diagnostic(patient, new Date());
-		//System.out.println(dia.getPatient().get_id());
-		 List<Symptom>ls=new Controller().doit();
-		 List<CronicDisease> x=new Controller().doit2();
-		 dia.addSymptom(ls.get(0));
-		 dia.addSymptom(ls.get(1));
-		 dia.addSymptom(ls.get(2));
-		 dia.addSymptom(ls.get(3));
-		 dia.addSymptom(ls.get(7));
-		 dia.addSymptom(ls.get(9));
-		 dia.addCronic(x.get(0));
-		 dia.addCronic(x.get(1));
-		dia.setPatient(patient);
-		dia.setTemperature(39);
-		dia.getPatient().setAge(45);
-		dia.setDate_diagnostic(new Date(0));
-		new Controller().Envo_diag(dia);
+//		Patient patient = new Patient(new ObjectId("623740f074ef0d449bbe60ec"), "", "", null, null, null,
+//				new Ville(new ObjectId("623719bb2f7a004ba90fea20"), "",
+//						new Region(new ObjectId("6237171cba758c64481615b1"), id, id, 0)));
+//		// patient.set_id(new ObjectId("623740f074ef0d449bbe60ec"));
+//		Diagnostic dia = new Diagnostic(patient, new Date());
+//		// System.out.println(dia.getPatient().get_id());
+//		List<Symptom> ls = new Controller().doit();
+//		List<CronicDisease> x = new Controller().doit2();
+//		dia.addSymptom(ls.get(0));
+//		dia.addSymptom(ls.get(1));
+//		dia.addSymptom(ls.get(2));
+//		dia.addSymptom(ls.get(3));
+//		dia.addSymptom(ls.get(7));
+//		dia.addSymptom(ls.get(9));
+//		dia.addCronic(x.get(0));
+//		dia.addCronic(x.get(1));
+//		dia.setPatient(patient);
+//		dia.setTemperature(39);
+//		dia.getPatient().setAge(45);
+//		dia.setDate_diagnostic(new Date(0));
+//		new Controller().Envo_diag(dia);
 
 	}
 

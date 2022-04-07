@@ -1,6 +1,7 @@
 package fstm.ilisi.view;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -10,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -32,6 +35,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -41,10 +45,13 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.bson.types.ObjectId;
+
 import com.toedter.calendar.JDateChooser;
 
 import fstm.ilisi.controller.Controller;
-import ma.fstm.ilisi.projet.model.bo.Diagnostic;
+import fstm.ilisi.model.service.PdfImprimer;
+import ma.fstm.ilisi.projet.model.service.Historique;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
@@ -93,7 +100,6 @@ public class Home extends JFrame {
 		}
 	}
 
-
 	/**
 	 * Launch the application.
 	 */
@@ -124,9 +130,8 @@ public class Home extends JFrame {
 		setForeground(Color.DARK_GRAY);
 		setBackground(new Color(192, 192, 192));
 		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage("D:\\Projet\\Client\\ClientSide\\recourses\\doctor.png"));
+				.getImage("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
 		setResizable(false);
-		setAlwaysOnTop(true);
 		CardLayout CL = new CardLayout(0, 0);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 812, 567);
@@ -149,11 +154,11 @@ public class Home extends JFrame {
 		JPanel histo_consult = new JPanel();
 		contentPane.add(histo_consult, "histo_consult");
 		histo_consult.setLayout(null);
-		
+
 		JButton voirHistorique = new JButton("");
 
 		voirHistorique.setBorder(new EmptyBorder(0, 0, 0, 0));
-		voirHistorique.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\history (1).png"));
+		voirHistorique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\history (1).png"));
 		voirHistorique.setBounds(92, 134, 233, 186);
 		histo_consult.add(voirHistorique);
 
@@ -163,7 +168,7 @@ public class Home extends JFrame {
 				CL.show(contentPane, "panelDesSymptomes");
 			}
 		});
-		nouveauDiagnostique.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\add-file.png"));
+		nouveauDiagnostique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\add-file.png"));
 		nouveauDiagnostique.setBounds(469, 134, 233, 186);
 		histo_consult.add(nouveauDiagnostique);
 
@@ -187,26 +192,36 @@ public class Home extends JFrame {
 			}
 		});
 		btnRevenirVersIdentification
-				.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\icons8-back-50.png"));
+				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\test\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification.setBounds(10, 11, 30, 30);
 		histo_consult.add(btnRevenirVersIdentification);
+		
+		JButton btnNewButton_5 = new JButton("New button");
+		btnNewButton_5.setBounds(347, 416, 89, 23);
+		histo_consult.add(btnNewButton_5);
 
 		JButton Commencer_btn = new JButton("Commencer");
 		// Verifier si patient existe ou non
 		Commencer_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = IdentifianttextField.getText();
-				if (ctr.VerifPat(id)) {
-					CL.show(contentPane, "histo_consult");
+				if (id.trim().length() < 5 || id.trim().length() > 8) {
+					String message = "CIN invalide !";
+					JOptionPane.showMessageDialog(contentPane, message, "CIN invalide", JOptionPane.ERROR_MESSAGE);
 				} else {
-					String message = "Vous n'avez pas encore un dossier ?";
-					int answer = JOptionPane.showConfirmDialog(contentPane, message);
-					if (answer == JOptionPane.YES_OPTION) {
-						// User clicked YES.
-						Controller.id = id;
-						CL.show(contentPane, "InfoUserPanel");
-					} else if (answer == JOptionPane.NO_OPTION) {
 
+					if (ctr.VerifPat(id)) {
+						CL.show(contentPane, "histo_consult");
+					} else {
+						String message = "Vous n'avez pas encore un dossier ?";
+						int answer = JOptionPane.showConfirmDialog(contentPane, message);
+						if (answer == JOptionPane.YES_OPTION) {
+							// User clicked YES.
+							Controller.id = id;
+							CL.show(contentPane, "InfoUserPanel");
+						} else if (answer == JOptionPane.NO_OPTION) {
+
+						}
 					}
 				}
 
@@ -221,7 +236,7 @@ public class Home extends JFrame {
 		Identification.add(image);
 
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\medical-record.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\medical-record.png"));
 		image.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_3 = new JLabel("Entrez le numero de votre dossier medical");
@@ -329,7 +344,7 @@ public class Home extends JFrame {
 
 		JPanel panelImg = new JPanel();
 		panelImg.setBounds(401, 36, 375, 384);
-		JLabel imgLabel = new JLabel(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\doctor.png"));
+		JLabel imgLabel = new JLabel(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\doctor.png"));
 		panelImg.add(imgLabel);
 
 		IUP_Center.add(panelImg);
@@ -347,7 +362,7 @@ public class Home extends JFrame {
 			}
 		});
 		btnRevenirVersIdentification_1
-				.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\icons8-back-50.png"));
+				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification_1.setForeground(Color.WHITE);
 		btnRevenirVersIdentification_1.setContentAreaFilled(false);
 		btnRevenirVersIdentification_1.setBorder(BorderFactory.createEmptyBorder());
@@ -398,7 +413,7 @@ public class Home extends JFrame {
 		// remplire liste des symptomes
 		String[] values = ctr.retreiveSymptoms();
 		DefaultListModel<String> listModelsrc = new DefaultListModel<String>();
-		for (int i = 0; i < values.length; i++) {
+		for (int i = 0; i < values.length-1; i++) {
 			listModelsrc.addElement(values[i]);
 		}
 		JList<String> list_src = new JList<String>(listModelsrc);
@@ -472,6 +487,9 @@ public class Home extends JFrame {
 				// appel du controlleur pour executer l'action envoyerDiagnostique()
 				ctr.effectuerDiagnostique((int) spinnerTemperature.getValue(), list_dst, chckbxContact, cbDiabete,
 						cbCardiaque, cbHypertendu);
+
+				CL.show(contentPane, "histo_consult");
+
 			}
 		});
 		PDS_South.add(Terminer);
@@ -490,28 +508,62 @@ public class Home extends JFrame {
 				CL.show(contentPane, "histo_consult");
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon("D:\\Projet\\Client\\ClientSide\\recourses\\icons8-back-50.png"));
+		btnNewButton_1
+				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\icons8-back-50.png"));
 		btnNewButton_1.setBounds(10, 11, 34, 35);
 		histoPanelCenter.add(btnNewButton_1);
-		String col[] = { "id", "date", "symptomes", "presence" };
+		String col[] = { "ID", "DATE", "POSSIBILITE PRESENCE" };
 
-		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+		DefaultTableModel tableModel = new DefaultTableModel(null, col);
+
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(20, 56, 756, 313);
+		histoPanelCenter.add(scrollPane_1);
 		table = new JTable(tableModel);
-		table.setBounds(58, 135, 667, 248);
-		histoPanelCenter.add(table);
-
+		table.setCellSelectionEnabled(true);
+		scrollPane_1.setViewportView(table);
+		table.setRowHeight(40);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		
+		JButton btnNewButton_4 = new JButton("Imprimer");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object value = table.getModel().getValueAt(table.getSelectedRow(), 0);
+				try {
+					 JFileChooser chooser = new JFileChooser();
+		                int option = chooser.showSaveDialog(null);
+		                if (option == JFileChooser.APPROVE_OPTION) {
+		                    File file = chooser.getSelectedFile();
+		                    //download(file);
+//		                    new FirstPdf().doit(file.getAbsolutePath()+".pdf");
+		                    new PdfImprimer(file.getAbsolutePath()+".pdf", (ObjectId) value).makePdf1();
+		                } else
+		                    System.out.println("No file was selected.");
+					ctr.AffichageDiagnostique((ObjectId) value);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnNewButton_4.setBounds(343, 421, 89, 23);
+		histoPanelCenter.add(btnNewButton_4);
+		Button impPdf = new Button("imprimer");
 		voirHistorique.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CL.show(contentPane, "historique");
-				try {
-					List<Diagnostic> l = ctr.retreiveDiagnostiques(Controller.p.getIdentifiant());
-					for (Diagnostic d : l) {
-						Object[] objs = { d.get_id(), d.getDate_diagnostic(), d.getSymptomes(), d.getPossi_presence() };
-						tableModel.addRow(objs);
-					}
-				} catch (IOException e1) {
-					e1.printStackTrace();
+
+				// List<Diagnostic> l =
+				// ctr.retreiveDiagnostiques(Controller.p.getIdentifiant());
+				List<Historique> l = ctr.afficherHistorique(Controller.p.get_id());
+
+				System.out.println(l);
+				for (Historique d : l) {
+					Object[] objs = { d.getIdDioagno(), d.getDateDia(), d.getPossi_covid(), };
+					tableModel.addRow(objs);
 				}
+
 			}
 		});
 
