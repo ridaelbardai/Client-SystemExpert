@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
@@ -56,10 +57,12 @@ import ma.fstm.ilisi.projet.model.service.Historique;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
+import java.awt.SystemColor;
 
 class notification extends Thread {
-	
+
 	private List<String[]> regions;
+
 	public notification() {
 		super();
 		this.regions = new Controller().retreiveStatistiques();
@@ -144,7 +147,11 @@ public class Home extends JFrame {
 			}
 		});
 	}
-
+	String remplirLabel(String[] infos) {
+		
+		return infos[0]+" :\ncas positifs :"+infos[1]+"\nguérris :"+infos[2]+"\nmorts :"+infos[3];
+		
+	}
 	/**
 	 * Create the frame.
 	 * 
@@ -172,6 +179,77 @@ public class Home extends JFrame {
 		JPanel Identification = new JPanel();
 		contentPane.add(Identification, "Identification");
 		Identification.setLayout(null);
+		
+				JTextPane lblNewLabeltanger = new JTextPane();
+				lblNewLabeltanger.setBackground(SystemColor.controlHighlight);
+				lblNewLabeltanger.setEditable(false);
+				lblNewLabeltanger.setBounds(369, 11, 112, 78);
+				Identification.add(lblNewLabeltanger);
+		
+				JTextPane lblNewLabelmerrakech = new JTextPane();
+				lblNewLabelmerrakech.setBounds(272, 123, 112, 65);
+				Identification.add(lblNewLabelmerrakech);
+		
+				JTextPane lblNewLabelrabat = new JTextPane();
+				lblNewLabelrabat.setBounds(69, 32, 112, 65);
+				Identification.add(lblNewLabelrabat);
+		
+				JTextPane lblNewLabelfes = new JTextPane();
+				lblNewLabelfes.setBackground(SystemColor.controlHighlight);
+				lblNewLabelfes.setEditable(false);
+				lblNewLabelfes.setBounds(501, 237, 112, 65);
+				Identification.add(lblNewLabelfes);
+		
+				JTextPane lblNewLabelbenimellal = new JTextPane();
+				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+				lblNewLabelbenimellal.setEditable(false);
+				lblNewLabelbenimellal.setBounds(623, 193, 112, 65);
+				Identification.add(lblNewLabelbenimellal);
+				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+				lblNewLabelbenimellal.setEditable(false);
+				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+				lblNewLabelbenimellal.setEditable(false);
+				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+				lblNewLabelbenimellal.setEditable(false);
+				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+				lblNewLabelbenimellal.setEditable(false);
+				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+				lblNewLabelbenimellal.setEditable(false);
+				lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+				lblNewLabelbenimellal.setEditable(false);
+		
+				JTextPane lblNewLabelguelmim = new JTextPane();
+				lblNewLabelguelmim.setBounds(20, 253, 112, 65);
+				Identification.add(lblNewLabelguelmim);
+		
+				JTextPane lblNewLabelagadir = new JTextPane();
+				lblNewLabelagadir.setBounds(100, 100, 112, 65);
+				Identification.add(lblNewLabelagadir);
+		
+				JTextPane lblNewLabeldakhla = new JTextPane();
+				lblNewLabeldakhla.setBackground(SystemColor.controlHighlight);
+				lblNewLabeldakhla.setEditable(false);
+				lblNewLabeldakhla.setBounds(86, 358, 112, 65);
+				Identification.add(lblNewLabeldakhla);
+		
+				JTextPane lblNewLabelerrachidia = new JTextPane();
+				lblNewLabelerrachidia.setBackground(SystemColor.controlHighlight);
+				lblNewLabelerrachidia.setEditable(false);
+				lblNewLabelerrachidia.setBounds(623, 328, 112, 65);
+				Identification.add(lblNewLabelerrachidia);
+		
+				JTextPane lblNewLabeloujda = new JTextPane();
+				lblNewLabeloujda.setBounds(674, 11, 112, 65);
+				Identification.add(lblNewLabeloujda);
+		
+				JTextPane lblNewLabellaayoun = new JTextPane();
+				lblNewLabellaayoun.setBounds(163, 237, 112, 65);
+				Identification.add(lblNewLabellaayoun);
+		JTextPane lblNewLabelcasa = new JTextPane();
+		lblNewLabelcasa.setBackground(SystemColor.controlHighlight);
+		lblNewLabelcasa.setEditable(false);
+		lblNewLabelcasa.setBounds(234, 47, 112, 65);
+		Identification.add(lblNewLabelcasa);
 
 		IdentifianttextField = new JTextField();
 		IdentifianttextField.setFont(new Font("Tahoma", Font.PLAIN, 25));
@@ -258,33 +336,63 @@ public class Home extends JFrame {
 		Commencer_btn.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		Commencer_btn.setBounds(285, 529, 196, 41);
 		Identification.add(Commencer_btn);
-		
-		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(46, 15, 690, 423);
-		Identification.add(scrollPane_2);
-		
-		JPanel image = new JPanel();
-		scrollPane_2.setViewportView(image);
-		image.setLayout(null);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setOpaque(false);
-		panel_1.setBounds(583, 69, 77, 75);
-		image.add(panel_1);
-		
-		JLabel lblNewLabel_4 = new JLabel("New label");
-		lblNewLabel_4.setBounds(10, 28, 46, 14);
-		panel_1.add(lblNewLabel_4);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\maroc.png"));
-		lblNewLabel_1.setBounds(-11, 0, 703, 427);
-		image.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_3 = new JLabel("Entrez le numero de votre dossier medical");
 		lblNewLabel_3.setBounds(285, 449, 200, 22);
 		Identification.add(lblNewLabel_3);
+
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\marocresized.png"));
+		lblNewLabel_1.setBounds(10, -10, 776, 448);
+		Identification.add(lblNewLabel_1);
+
+		/******************************************************************************************************************************************/
+
+		for (String[] region : regions) {
+			switch (region[0]) {
+			case "Beni Mellal-Khénifra":
+				lblNewLabelbenimellal.setText(remplirLabel(region));
+				break;
+			case "Casablanca-Settat":
+				lblNewLabelcasa.setText(remplirLabel(region));
+				break;
+			case "Eddakhla-Oued Eddahab":
+				lblNewLabeldakhla.setText(remplirLabel(region));
+				break;
+			case "Drâa-Tafilalet":
+				lblNewLabelerrachidia.setText(remplirLabel(region));
+				break;
+			case "Fés-Meknés":
+				lblNewLabelfes.setText(remplirLabel(region));
+				break;
+			case "Guelmim-Oued Noun":
+				lblNewLabelguelmim.setText(remplirLabel(region));
+				break;
+			case "Oriental":
+				lblNewLabeloujda.setText(remplirLabel(region));
+				break;
+			case "Laayoune-Sakia El Hamra":
+				lblNewLabellaayoun.setText(remplirLabel(region));
+				break;
+			case "Marrakech-Safi":
+				lblNewLabelmerrakech.setText(remplirLabel(region));
+				break;
+			case "Rabat-Salé-Kénitra":
+				lblNewLabelrabat.setText(remplirLabel(region));
+				break;
+			case "Souss-Massa":
+				lblNewLabelagadir.setText(remplirLabel(region));
+				break;
+			case "Tanger-Tétouan-Al Hoceima":
+				lblNewLabeltanger.setText(remplirLabel(region));
+				break;
+				
+			default:
+				break;
+			}
+		}
+
+		/******************************************************************************************************************************************/
 
 		JPanel InfoUserPanel = new JPanel();
 		contentPane.add(InfoUserPanel, "InfoUserPanel");
@@ -623,6 +731,5 @@ public class Home extends JFrame {
 			}
 		});
 	}
-	
-	
+
 }
