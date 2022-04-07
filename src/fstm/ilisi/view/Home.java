@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -56,10 +57,34 @@ import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
+class notification extends Thread {
+	
+	private List<String[]> regions;
+	public notification() {
+		super();
+		this.regions = new Controller().retreiveStatistiques();
+	}
+
+	@Override
+	public void run() {
+
+		try {
+			for (String[] strings : regions) {
+				System.out.println(
+						strings[0] + strings[1] + strings[2] + strings[3] + strings[4] + strings[5] + strings[6]);
+			}
+		} catch (Exception e) {
+
+		}
+
+	}
+}
+
 public class Home extends JFrame {
 	/**
 	 * 
 	 */
+	private List<String[]> regions;
 	private Controller ctr;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -107,10 +132,12 @@ public class Home extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					new notification().start();
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					JFrame.setDefaultLookAndFeelDecorated(true);
 					Home frame = new Home();
 					frame.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -126,6 +153,7 @@ public class Home extends JFrame {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Home() throws IOException {
 		ctr = new Controller();
+		this.regions = ctr.retreiveStatistiques();
 		setTitle("System Expert Covid19");
 		setForeground(Color.DARK_GRAY);
 		setBackground(new Color(192, 192, 192));
@@ -134,7 +162,7 @@ public class Home extends JFrame {
 		setResizable(false);
 		CardLayout CL = new CardLayout(0, 0);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 812, 567);
+		setBounds(100, 100, 812, 630);
 		contentPane = new JPanel();
 		contentPane.setToolTipText("");
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -147,7 +175,7 @@ public class Home extends JFrame {
 
 		IdentifianttextField = new JTextField();
 		IdentifianttextField.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		IdentifianttextField.setBounds(260, 311, 248, 50);
+		IdentifianttextField.setBounds(267, 471, 248, 50);
 		Identification.add(IdentifianttextField);
 		IdentifianttextField.setColumns(10);
 
@@ -195,7 +223,7 @@ public class Home extends JFrame {
 				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\test\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification.setBounds(10, 11, 30, 30);
 		histo_consult.add(btnRevenirVersIdentification);
-		
+
 		JButton btnNewButton_5 = new JButton("New button");
 		btnNewButton_5.setBounds(347, 416, 89, 23);
 		histo_consult.add(btnNewButton_5);
@@ -228,19 +256,34 @@ public class Home extends JFrame {
 			}
 		});
 		Commencer_btn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		Commencer_btn.setBounds(288, 384, 196, 41);
+		Commencer_btn.setBounds(285, 529, 196, 41);
 		Identification.add(Commencer_btn);
-
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(46, 15, 690, 423);
+		Identification.add(scrollPane_2);
+		
 		JPanel image = new JPanel();
-		image.setBounds(172, 11, 423, 325);
-		Identification.add(image);
-
+		scrollPane_2.setViewportView(image);
+		image.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setOpaque(false);
+		panel_1.setBounds(583, 69, 77, 75);
+		image.add(panel_1);
+		
+		JLabel lblNewLabel_4 = new JLabel("New label");
+		lblNewLabel_4.setBounds(10, 28, 46, 14);
+		panel_1.add(lblNewLabel_4);
+		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\medical-record.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\maroc.png"));
+		lblNewLabel_1.setBounds(-11, 0, 703, 427);
 		image.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_3 = new JLabel("Entrez le numero de votre dossier medical");
-		lblNewLabel_3.setBounds(288, 458, 200, 22);
+		lblNewLabel_3.setBounds(285, 449, 200, 22);
 		Identification.add(lblNewLabel_3);
 
 		JPanel InfoUserPanel = new JPanel();
@@ -413,7 +456,7 @@ public class Home extends JFrame {
 		// remplire liste des symptomes
 		String[] values = ctr.retreiveSymptoms();
 		DefaultListModel<String> listModelsrc = new DefaultListModel<String>();
-		for (int i = 0; i < values.length-1; i++) {
+		for (int i = 0; i < values.length - 1; i++) {
 			listModelsrc.addElement(values[i]);
 		}
 		JList<String> list_src = new JList<String>(listModelsrc);
@@ -525,21 +568,21 @@ public class Home extends JFrame {
 		table.setRowHeight(40);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		
+
 		JButton btnNewButton_4 = new JButton("Imprimer");
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object value = table.getModel().getValueAt(table.getSelectedRow(), 0);
 				try {
-					 JFileChooser chooser = new JFileChooser();
-		                int option = chooser.showSaveDialog(null);
-		                if (option == JFileChooser.APPROVE_OPTION) {
-		                    File file = chooser.getSelectedFile();
-		                    //download(file);
+					JFileChooser chooser = new JFileChooser();
+					int option = chooser.showSaveDialog(null);
+					if (option == JFileChooser.APPROVE_OPTION) {
+						File file = chooser.getSelectedFile();
+						// download(file);
 //		                    new FirstPdf().doit(file.getAbsolutePath()+".pdf");
-		                    new PdfImprimer(file.getAbsolutePath()+".pdf", (ObjectId) value).makePdf1();
-		                } else
-		                    System.out.println("No file was selected.");
+						new PdfImprimer(file.getAbsolutePath() + ".pdf", (ObjectId) value).makePdf1();
+					} else
+						System.out.println("No file was selected.");
 					ctr.AffichageDiagnostique((ObjectId) value);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -580,4 +623,6 @@ public class Home extends JFrame {
 			}
 		});
 	}
+	
+	
 }

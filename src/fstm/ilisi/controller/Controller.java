@@ -27,7 +27,7 @@ import ma.fstm.ilisi.projet.model.service.Request;
 
 public class Controller {
 
-	String server = "172.17.36.144";
+	String server = "192.168.43.10";
 	public static Patient p;
 	public static String id;
 
@@ -603,6 +603,58 @@ public class Controller {
 			e.printStackTrace();
 		}
 		return x;
+	}
+	
+	
+	public List<String[]> retreiveStatistiques(){
+		List<Region> regions = new ArrayList<Region>();
+		try (Socket socket = new Socket(server, 234)) {
+			// pour la recuperation
+
+			// pour l'envoie
+			OutputStream outputStream = socket.getOutputStream();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+			Request req = new Request(null, 6);
+
+			objectOutputStream.writeObject(req);
+			System.out.println(req);
+			System.out.println("Connexion reussite 1!");
+			InputStream is = socket.getInputStream();
+			System.out.println(is);
+			ObjectInputStream objectInputStream = new ObjectInputStream(is);
+			System.out.println("Connexion reussite !");
+			regions = (List<Region>) objectInputStream.readObject();
+			try {
+				is.close();
+				objectOutputStream.close();
+				socket.close();
+			} catch (IOException i) {
+				System.out.println(i);
+			}
+		} catch (IOException e) {
+
+			System.out.println(e);
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}
+		
+		List<String[]> listDesStringsRegions = new ArrayList<String[]>();
+		for (int i = 0; i < regions.size(); i++) {
+			String[] row = new String[7];
+			row[0] = regions.get(i).getRegionName();
+			row[1] = Integer.toString(regions.get(i).getPopulationPositif());
+			row[2] = Integer.toString(regions.get(i).getRecovery());
+			row[3] = Integer.toString(regions.get(i).getDeath());
+			row[4] = Integer.toString(regions.get(i).getTotDeath());
+			row[5] = Integer.toString(regions.get(i).getTotalPositif());
+			row[6] = Integer.toString(regions.get(i).getTotRecovery());
+			listDesStringsRegions.add(row);
+		}
+		
+		return listDesStringsRegions;
 	}
 
 	public static void main(String[] args) {
