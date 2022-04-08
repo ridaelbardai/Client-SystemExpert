@@ -27,7 +27,7 @@ import ma.fstm.ilisi.projet.model.service.Request;
 
 public class Controller {
 
-	String server = "localhost";
+	String server = "192.168.43.10";
 	public static Patient p;
 	public static String id;
 

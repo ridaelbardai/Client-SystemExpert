@@ -250,12 +250,14 @@ public class Home extends JFrame {
 				} else {
 
 					if (ctr.VerifPat(id)) {
+						IdentifianttextField.setText("");
 						CL.show(contentPane, "histo_consult");
 					} else {
 						String message = "Vous n'avez pas encore un dossier ?";
 						int answer = JOptionPane.showConfirmDialog(contentPane, message);
 						if (answer == JOptionPane.YES_OPTION) {
 							// User clicked YES.
+							IdentifianttextField.setText("");
 							Controller.id = id;
 							CL.show(contentPane, "InfoUserPanel");
 						} else if (answer == JOptionPane.NO_OPTION) {
