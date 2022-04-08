@@ -100,6 +100,7 @@ public class Home extends JFrame {
 	private JTextField IdentifianttextField;
 	private JTable table;
 	private JTextField textFieldAdress;
+	private JList<String> list_dst;
 
 	/**
 	 * cette fonction sert a transferer les elements entre les deux listes vers les
@@ -205,11 +206,6 @@ public class Home extends JFrame {
 		histo_consult.add(voirHistorique);
 
 		JButton nouveauDiagnostique = new JButton("");
-		nouveauDiagnostique.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CL.show(contentPane, "panelDesSymptomes");
-			}
-		});
 		nouveauDiagnostique.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\recourses\\add-file.png"));
 		nouveauDiagnostique.setBounds(469, 47, 361, 305);
 		histo_consult.add(nouveauDiagnostique);
@@ -237,7 +233,7 @@ public class Home extends JFrame {
 				.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\test\recourses\\icons8-back-50.png"));
 		btnRevenirVersIdentification.setBounds(10, 11, 30, 30);
 		histo_consult.add(btnRevenirVersIdentification);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\images\\protection.jpg"));
 		lblNewLabel_1.setBounds(24, 363, 892, 291);
@@ -274,9 +270,9 @@ public class Home extends JFrame {
 		Commencer_btn.setBounds(373, 613, 196, 41);
 		Identification.add(Commencer_btn);
 
-		JLabel lblNewLabel_3 = new JLabel("Entrez le numero de votre dossier medical");
+		JLabel lblNewLabel_3 = new JLabel("Entrez votre CIN");
 		lblNewLabel_3.setFont(new Font("Segoe UI Semilight", Font.PLAIN, 13));
-		lblNewLabel_3.setBounds(352, 530, 248, 22);
+		lblNewLabel_3.setBounds(416, 530, 103, 22);
 		Identification.add(lblNewLabel_3);
 
 		JPanel panel_1 = new JPanel();
@@ -285,85 +281,83 @@ public class Home extends JFrame {
 		panel_1.setBounds(4, -2, 912, 521);
 		Identification.add(panel_1);
 		panel_1.setLayout(null);
-		
-				JTextPane lblNewLabeltanger = new JTextPane();
-				lblNewLabeltanger.setBounds(460, 11, 112, 78);
-				panel_1.add(lblNewLabeltanger);
-				lblNewLabeltanger.setBackground(SystemColor.controlHighlight);
-				lblNewLabeltanger.setEditable(false);
-				
-						JTextPane lblNewLabelrabat = new JTextPane();
-						lblNewLabelrabat.setBounds(338, 48, 112, 65);
-						panel_1.add(lblNewLabelrabat);
-						lblNewLabelrabat.setBackground(SystemColor.controlHighlight);
-						lblNewLabelrabat.setEditable(false);
-						
-								JTextPane lblNewLabelguelmim = new JTextPane();
-								lblNewLabelguelmim.setBounds(116, 202, 112, 65);
-								panel_1.add(lblNewLabelguelmim);
-								lblNewLabelguelmim.setBackground(SystemColor.controlHighlight);
-								lblNewLabelguelmim.setEditable(false);
-								
-										JTextPane lblNewLabelfes = new JTextPane();
-										lblNewLabelfes.setBounds(744, 202, 112, 65);
-										panel_1.add(lblNewLabelfes);
-										lblNewLabelfes.setBackground(SystemColor.controlHighlight);
-										lblNewLabelfes.setEditable(false);
-										
-												JTextPane lblNewLabelerrachidia = new JTextPane();
-												lblNewLabelerrachidia.setBounds(622, 244, 112, 65);
-												panel_1.add(lblNewLabelerrachidia);
-												lblNewLabelerrachidia.setBackground(SystemColor.controlHighlight);
-												lblNewLabelerrachidia.setEditable(false);
-												
-														JTextPane lblNewLabeldakhla = new JTextPane();
-														lblNewLabeldakhla.setBounds(251, 445, 112, 65);
-														panel_1.add(lblNewLabeldakhla);
-														lblNewLabeldakhla.setBackground(SystemColor.controlHighlight);
-														lblNewLabeldakhla.setEditable(false);
-														
-														JTextPane lblNewLabellaayoun = new JTextPane();
-														lblNewLabellaayoun.setBounds(338, 370, 112, 65);
-														panel_1.add(lblNewLabellaayoun);
-														lblNewLabellaayoun.setBackground(SystemColor.controlHighlight);
-														lblNewLabellaayoun.setEditable(false);
-														
-																JTextPane lblNewLabelagadir = new JTextPane();
-																lblNewLabelagadir.setBounds(466, 340, 112, 65);
-																panel_1.add(lblNewLabelagadir);
-																lblNewLabelagadir.setBackground(SystemColor.controlHighlight);
-																lblNewLabelagadir.setEditable(false);
-																
-																		JTextPane lblNewLabelbenimellal = new JTextPane();
-																		lblNewLabelbenimellal.setBounds(500, 264, 112, 65);
-																		panel_1.add(lblNewLabelbenimellal);
-																		lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
-																		lblNewLabelbenimellal.setEditable(false);
-																		
-																		JTextPane lblNewLabelcasa = new JTextPane();
-																		lblNewLabelcasa.setBounds(304, 124, 112, 65);
-																		panel_1.add(lblNewLabelcasa);
-																		lblNewLabelcasa.setBackground(SystemColor.controlHighlight);
-																		lblNewLabelcasa.setEditable(false);
-																		
-																				JTextPane lblNewLabeloujda = new JTextPane();
-																				lblNewLabeloujda.setBounds(776, 24, 112, 65);
-																				panel_1.add(lblNewLabeloujda);
-																				lblNewLabeloujda.setBackground(SystemColor.control);
-																				lblNewLabeloujda.setEditable(false);
-																				
-																						JTextPane lblNewLabelmerrakech = new JTextPane();
-																						lblNewLabelmerrakech.setBounds(238, 202, 112, 65);
-																						panel_1.add(lblNewLabelmerrakech);
-																						lblNewLabelmerrakech.setBackground(SystemColor.controlHighlight);
-																						lblNewLabelmerrakech.setEditable(false);
-																						
-																								JLabel carteMaroc = new JLabel("");
-																								carteMaroc.setBounds(28, 27, 855, 494);
-																								panel_1.add(carteMaroc);
-																								carteMaroc.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\marocresized.png"));
 
-		
+		JTextPane lblNewLabeltanger = new JTextPane();
+		lblNewLabeltanger.setBounds(460, 11, 112, 78);
+		panel_1.add(lblNewLabeltanger);
+		lblNewLabeltanger.setBackground(SystemColor.controlHighlight);
+		lblNewLabeltanger.setEditable(false);
+
+		JTextPane lblNewLabelrabat = new JTextPane();
+		lblNewLabelrabat.setBounds(338, 48, 112, 65);
+		panel_1.add(lblNewLabelrabat);
+		lblNewLabelrabat.setBackground(SystemColor.controlHighlight);
+		lblNewLabelrabat.setEditable(false);
+
+		JTextPane lblNewLabelguelmim = new JTextPane();
+		lblNewLabelguelmim.setBounds(116, 202, 112, 65);
+		panel_1.add(lblNewLabelguelmim);
+		lblNewLabelguelmim.setBackground(SystemColor.controlHighlight);
+		lblNewLabelguelmim.setEditable(false);
+
+		JTextPane lblNewLabelfes = new JTextPane();
+		lblNewLabelfes.setBounds(744, 202, 112, 65);
+		panel_1.add(lblNewLabelfes);
+		lblNewLabelfes.setBackground(SystemColor.controlHighlight);
+		lblNewLabelfes.setEditable(false);
+
+		JTextPane lblNewLabelerrachidia = new JTextPane();
+		lblNewLabelerrachidia.setBounds(622, 244, 112, 65);
+		panel_1.add(lblNewLabelerrachidia);
+		lblNewLabelerrachidia.setBackground(SystemColor.controlHighlight);
+		lblNewLabelerrachidia.setEditable(false);
+
+		JTextPane lblNewLabeldakhla = new JTextPane();
+		lblNewLabeldakhla.setBounds(251, 445, 112, 65);
+		panel_1.add(lblNewLabeldakhla);
+		lblNewLabeldakhla.setBackground(SystemColor.controlHighlight);
+		lblNewLabeldakhla.setEditable(false);
+
+		JTextPane lblNewLabellaayoun = new JTextPane();
+		lblNewLabellaayoun.setBounds(338, 370, 112, 65);
+		panel_1.add(lblNewLabellaayoun);
+		lblNewLabellaayoun.setBackground(SystemColor.controlHighlight);
+		lblNewLabellaayoun.setEditable(false);
+
+		JTextPane lblNewLabelagadir = new JTextPane();
+		lblNewLabelagadir.setBounds(466, 340, 112, 65);
+		panel_1.add(lblNewLabelagadir);
+		lblNewLabelagadir.setBackground(SystemColor.controlHighlight);
+		lblNewLabelagadir.setEditable(false);
+
+		JTextPane lblNewLabelbenimellal = new JTextPane();
+		lblNewLabelbenimellal.setBounds(500, 264, 112, 65);
+		panel_1.add(lblNewLabelbenimellal);
+		lblNewLabelbenimellal.setBackground(SystemColor.controlHighlight);
+		lblNewLabelbenimellal.setEditable(false);
+
+		JTextPane lblNewLabelcasa = new JTextPane();
+		lblNewLabelcasa.setBounds(304, 124, 112, 65);
+		panel_1.add(lblNewLabelcasa);
+		lblNewLabelcasa.setBackground(SystemColor.controlHighlight);
+		lblNewLabelcasa.setEditable(false);
+
+		JTextPane lblNewLabeloujda = new JTextPane();
+		lblNewLabeloujda.setBounds(776, 24, 112, 65);
+		panel_1.add(lblNewLabeloujda);
+		lblNewLabeloujda.setBackground(SystemColor.control);
+		lblNewLabeloujda.setEditable(false);
+
+		JTextPane lblNewLabelmerrakech = new JTextPane();
+		lblNewLabelmerrakech.setBounds(238, 202, 112, 65);
+		panel_1.add(lblNewLabelmerrakech);
+		lblNewLabelmerrakech.setBackground(SystemColor.controlHighlight);
+		lblNewLabelmerrakech.setEditable(false);
+
+		JLabel carteMaroc = new JLabel("");
+		carteMaroc.setBounds(28, 27, 855, 494);
+		panel_1.add(carteMaroc);
+		carteMaroc.setIcon(new ImageIcon("C:\\Users\\rb99\\Desktop\\marocresized.png"));
 
 		/******************************************************************************************************************************************/
 
@@ -514,7 +508,8 @@ public class Home extends JFrame {
 
 		JPanel panelImg = new JPanel();
 		panelImg.setBounds(401, 36, 515, 534);
-		JLabel imgLabel = new JLabel(new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\images\\inscription.png"));
+		JLabel imgLabel = new JLabel(
+				new ImageIcon("C:\\Users\\rb99\\eclipse-workspace\\test\\images\\inscription.png"));
 		panelImg.add(imgLabel);
 
 		IUP_Center.add(panelImg);
@@ -579,13 +574,13 @@ public class Home extends JFrame {
 		panel_symptomes.setLayout(null);
 		// remplire liste des symptomes
 		String[] values = ctr.retreiveSymptoms();
+		DefaultListModel<String> listModeldst = new DefaultListModel<String>();
 		DefaultListModel<String> listModelsrc = new DefaultListModel<String>();
 		for (int i = 0; i < values.length - 1; i++) {
 			listModelsrc.addElement(values[i]);
 		}
 
-		DefaultListModel listModeldst = new DefaultListModel();
-		JList<String> list_dst = new JList<String>();
+		list_dst = new JList<String>(listModeldst);
 		list_dst.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		list_dst.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		list_dst.setBounds(572, 106, 305, 282);
@@ -617,10 +612,10 @@ public class Home extends JFrame {
 		panel_symptomes.add(list_src);
 		list_src.setVisibleRowCount(10);
 		list_src.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		
-				list_src.setToolTipText("");
-				list_src.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-				list_src.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+
+		list_src.setToolTipText("");
+		list_src.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		list_src.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 
 		JPanel panel_maladiesChroniques = new JPanel();
 		PDS_Center.add(panel_maladiesChroniques, BorderLayout.SOUTH);
@@ -655,7 +650,19 @@ public class Home extends JFrame {
 				// appel du controlleur pour executer l'action envoyerDiagnostique()
 				ctr.effectuerDiagnostique((int) spinnerTemperature.getValue(), list_dst, chckbxContact, cbDiabete,
 						cbCardiaque, cbHypertendu);
-
+				spinnerTemperature.setValue(37);
+				cbHypertendu.setSelected(false);
+				cbCardiaque.setSelected(false);
+				cbDiabete.setSelected(false);
+				chckbxContact.setSelected(false);
+				
+				int begn = 0;
+			      int end = list_dst.getModel().getSize() - 1;
+			      if (end >= 0) {
+			    	  list_dst.setSelectionInterval(begn, end);
+			      }
+			      moveSelectedTo(list_dst, list_src);
+				
 				CL.show(contentPane, "histo_consult");
 
 			}
@@ -718,8 +725,9 @@ public class Home extends JFrame {
 		});
 		btnNewButton_4.setBounds(393, 444, 136, 86);
 		histoPanelCenter.add(btnNewButton_4);
-		
-		JLabel lblNewLabel_4 = new JLabel("Selectionez l'identifiant du diagnostique que vous voulez t\u00E9l\u00E9charger\r\n");
+
+		JLabel lblNewLabel_4 = new JLabel(
+				"Selectionez l'identifiant du diagnostique que vous voulez t\u00E9l\u00E9charger\r\n");
 		lblNewLabel_4.setBounds(20, 392, 335, 14);
 		histoPanelCenter.add(lblNewLabel_4);
 		Button impPdf = new Button("imprimer");
@@ -739,7 +747,17 @@ public class Home extends JFrame {
 
 			}
 		});
-
+		
+		
+		// fair un diagnostique
+		nouveauDiagnostique.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listModeldst.clear();
+				CL.show(contentPane, "panelDesSymptomes");
+			}
+		});
+		
+		
 		suivant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String nom = textFieldNom.getText();
