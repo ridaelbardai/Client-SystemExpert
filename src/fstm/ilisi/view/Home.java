@@ -543,7 +543,7 @@ public class Home extends JFrame {
 		JButton btnNewButton = new JButton("precedent");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CL.previous(contentPane);
+				CL.show(contentPane, "histo_consult");
 			}
 		});
 		PDS_South.add(btnNewButton);
@@ -650,6 +650,7 @@ public class Home extends JFrame {
 				// appel du controlleur pour executer l'action envoyerDiagnostique()
 				ctr.effectuerDiagnostique((int) spinnerTemperature.getValue(), list_dst, chckbxContact, cbDiabete,
 						cbCardiaque, cbHypertendu);
+				//rendre tous les cases a cocher et les listes vides
 				spinnerTemperature.setValue(37);
 				cbHypertendu.setSelected(false);
 				cbCardiaque.setSelected(false);
@@ -767,7 +768,7 @@ public class Home extends JFrame {
 				Date datenaiss = dateChooser.getDate();
 				String ville = comboBoxVilles.getSelectedItem().toString();
 				ctr.ctrInscrip(nom, prenom, identifiant, datenaiss, adress, ville);
-				CL.show(contentPane, "panelDesSymptomes");
+				CL.show(contentPane, "histo_consult");
 			}
 		});
 	}
